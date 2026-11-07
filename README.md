@@ -19,11 +19,12 @@ run the sprints  Lanewright or scrum-kit
 | [Lanewright Intake](skills/intake/) | PDF, DOCX, Markdown, text, images, chat exports, a local folder, a Google Drive folder, pasted text or one line | `docs/requirements/intake.md`: sources, cited facts by kind, gaps, interview, assumptions, project kind |
 | [Lanewright SRS](skills/srs/) | `intake.md` | `srs.md` + `srs.docx`: IEEE 29148-style SRS or change-request SRS with traceability |
 | [Lanewright Sprint Planner](skills/sprint-planner/) | `srs.md` | `weekly-sprint-plan.md` + `.docx` and one backlog file per sprint |
-| [Lanewright Backlog Check](skills/backlog-check/) | sprint backlog files (Lanewright or scrum-kit format), optionally `kit.json` and `srs.md` | `backlog-check-{nn}.md`: READY / READY WITH WARNINGS / NOT READY, findings with fixes, total SP, a sign-off block only a human fills |
+| [Lanewright Backlog Check](skills/backlog-check/) | sprint backlog files (Lanewright or scrum-kit format), optionally `kit.json` and `srs.md` | `backlog-check-{nn}.md`: SHA-256 of each checked file, READY / READY WITH WARNINGS / NOT READY per file, findings with fixes, total SP, a sign-off block only a human fills |
 
 Principles shared by all four: no fact without a source citation, unknowns written as
 `ASSUMPTION`, at most two short interview rounds with proposed defaults, documents in the language
-of the sources, nothing overwritten without asking, and no personal data copied into the output.
+of the sources, no existing content overwritten without asking, and no personal data copied into
+the output.
 
 ## Running the sprints
 
@@ -62,7 +63,8 @@ Use `python3` or `python` instead of `py` outside Windows.
 publik digital terpadu (Superapps)": the intake, the SRS (Markdown and Word), an eight-week sprint
 plan (Markdown and Word) and eight sprint backlogs, in Indonesian because the brief is. Everything
 the brief did not say is labelled as an assumption. The backlog check on those files reports
-`READY WITH WARNINGS`: no errors, eight short acceptance criteria.
+`READY WITH WARNINGS`: no errors, eight short acceptance criteria and ten items that cite more than
+three requirements.
 
 ## Repository layout
 

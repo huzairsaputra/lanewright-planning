@@ -2,7 +2,7 @@
 name: lanewright-sprint-planner
 description: Turns an SRS (docs/requirements/srs.md) into a weekly Scrum sprint plan, docs/sprints/weekly-sprint-plan.md plus a Word copy, and one backlog file per sprint in the exact format Lanewright or scrum-kit reads, after a short interview on dates, team, capacity, holidays and milestones. Items are sized 2 to 10 story points, foundations come first, every item has an owner role and testable acceptance criteria from the SRS, and no sprint exceeds its capacity. Use when the user asks for a sprint plan, a release or project schedule, a sprint backlog, story-point estimates or a timeline from requirements.
 summary: SRS in, capacity-checked Monday-to-Sunday sprint plan (Markdown and DOCX) and per-sprint backlog files out, ready to run with Lanewright or scrum-kit.
-version: 1.0.0
+version: 1.0.1
 tags: [scrum, sprint-planning, backlog, story-points, project-planning, agile]
 keywords: [weekly sprint plan, sprint backlog, capacity planning, definition of done, sprint goal, story point estimation, kit.json, scrum-kit]
 use_cases:

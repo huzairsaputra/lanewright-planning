@@ -2,7 +2,7 @@
 name: lanewright-intake
 description: Turns raw project input (PDF, DOCX, Markdown, text, images, screenshots, chat exports, a local folder, a Google Drive folder, pasted text or a single line describing the idea) into one evidence file, docs/requirements/intake.md, where every fact carries a kind tag and a source citation, gaps are listed, a short interview fills what is missing and anything still unknown is labelled ASSUMPTION. Use when the user wants to collect, read or summarize project documents before writing requirements, asks to start a new project or change request from loose material, or asks for an intake, requirements gathering or a fact base for an SRS.
 summary: Raw project material in, one cited evidence file out, with gaps, a two-round interview and explicit assumptions, ready for an SRS and a sprint plan.
-version: 1.0.0
+version: 1.0.1
 tags: [requirements, intake, business-analysis, srs, project-planning, documentation]
 keywords: [requirements gathering, evidence file, source citation, stakeholder interview, project intake, change request, docx extraction, assumptions log]
 use_cases:
