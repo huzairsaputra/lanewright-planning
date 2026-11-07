@@ -62,6 +62,20 @@ py -I shared/scripts/md_to_docx.py --self-test
 py -I build.py
 ```
 
+## Platforms
+
+Windows, macOS and Linux. The skills are plain instructions plus two Python standard-library
+scripts; CI runs the tests and builds on all three operating systems. The skills were tried end to
+end in Claude Code; other agents that can read files and run Python should work but are not tested
+yet.
+
+## Roadmap
+
+- **Audio and video input** (recorded meetings, voice notes) through STT-Platform, a speech-to-text
+  service in development. It will use your own STT-Platform account; subscribers send recordings
+  without limits, and free accounts see their remaining quota before anything is sent. Until then,
+  Intake asks for a transcript.
+
 ## License
 
 MIT. Copyright (c) 2026 Huzair Saputra.
