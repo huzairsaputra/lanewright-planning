@@ -16,8 +16,8 @@ use: `docs/sprints/weekly-sprint-plan.md` plus a Word copy, and one backlog file
 - Backlog files are written in the exact format
   [Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or
   the free [scrum-kit](https://github.com/huzairsaputra/scrum-kit) reads (detected from
-  `.claude/kit.json`), so you can run sprint 1 right away. Existing backlog files are never
-  overwritten.
+  `.claude/kit.json`), so you can run sprint 1 right away. Backlog files that already have items
+  are never overwritten; a file holding only the template placeholder is.
 
 Try: "Run Lanewright Sprint Planner".
 

@@ -27,7 +27,11 @@ before writing; they are the exact layouts.
 - **Document language = the SRS language** (the SRS follows its sources); the user may override it.
   Indonesian documents use the terms in `templates/weekly-sprint-plan.md`; any other language
   translates every heading, table header and fixed line, including "Next step" and the fixed
-  phrases "to confirm" and "date to confirm".
+  phrases "to confirm" and "date to confirm". The labels a workflow tool reads follow that tool's
+  format in every language: the backlog column headers and `Sprint goal:` / `Period:` (Lanewright)
+  or `Sprint Goal:` / `Periode:` (scrum-kit), exactly as `templates/backlog.md` shows. If the
+  repository's own rules (`CLAUDE.md` or similar) ask for another language, still follow the
+  sources and note the difference as a planner assumption.
 - **Team codes.** Each role has a code that is a valid ID part, letters, digits and hyphens only
   (`BE-1`, `FE-1`, `OPS`, `QA`; default team `BE-1`, `FE-1`, `OPS`). Item IDs and the plan's Owner
   column use the team code; backlog files map it as Step 2 says.
@@ -40,6 +44,11 @@ before writing; they are the exact layouts.
   every proposed default as a planner assumption `PA-nn` and skip the next round.
 - **Ask before overwriting** `weekly-sprint-plan.md`. Never overwrite a backlog file that already
   has items: write `sprint-{nn}-backlog.proposed.md` beside it and say so.
+- **Placeholder backlogs have no items.** A backlog file has items only when a table row has real
+  content in a cell other than ID and SP. A file whose only rows are the template placeholder
+  (cells such as `<item>` or `<SP>`), whose rows are commented out, or whose table has no rows has
+  no items: overwrite it with the real backlog and write no `.proposed.md` for it. A `.proposed.md`
+  is written only when the official file already has real items.
 - Do not commit, push or upload anything unless the user asks.
 
 ## Step 1: Load the requirements
@@ -47,6 +56,15 @@ before writing; they are the exact layouts.
 Read `docs/requirements/srs.md` in full: requirements and priorities, acceptance criteria,
 assumptions, open questions, integrations, deadlines. No SRS: say so and offer to run Lanewright
 Intake and Lanewright SRS first (or accept the user's requirements list as a stand-in source).
+
+Then read the project's rules if there are any (`CLAUDE.md`, `AGENTS.md` or similar). If they say
+implementers do not write tests and QA tests only in the following sprint, the plan conflicts with
+the Definition of Done (tests pass within the sprint) and the last sprint ends untested. Write
+this into the plan as an open decision for the product owner with three options: (a) add a week,
+(b) accept the items without tests for now, (c) let QA test in the same sprint after the paired
+implementation item merges. Until the product owner decides, plan option (c): each QA item sits in
+the same sprint as the item it tests, is scheduled after it, and its text says `Tests: <item ID>`
+(the label `Tests:` stays as it is in every language, like the IDs).
 
 ## Step 2: Detect the workflow tool
 
@@ -112,10 +130,12 @@ confirm".
 
 Take items in order and place each in the earliest sprint where both the sprint capacity and its
 owner's capacity have room and its dependencies are met. A dependency finishes in an earlier
-sprint, with three exceptions: within one owner, an item may follow its dependency in the same
+sprint, with four exceptions: within one owner, an item may follow its dependency in the same
 sprint; across owners, a contract, schema or setup item may share the sprint when it is scheduled
-for the sprint's first days (mark it "day 1–2"); UAT fixes may share the UAT sprint. Keep about 10%
-free for bugs and review when the plan allows. Give each sprint one Sprint Goal: a demonstrable
+for the sprint's first days (mark it "day 1–2"); UAT fixes may share the UAT sprint; a QA item
+whose text says `Tests: <item ID>` may share that item's sprint, scheduled after it (Step 1). Keep
+about 10% of each sprint's capacity free for bugs and review when the plan allows: 10% of the whole
+team's capacity in that sprint, not 10% per role. Give each sprint one Sprint Goal: a demonstrable
 outcome. Put milestones in the sprint that holds them.
 
 IDs: `<team code>-S{nn}-<seq>`: `{nn}` the two-digit sprint, `<seq>` two digits counted per team code
@@ -137,12 +157,16 @@ and delete the directory. The script reads no other file of this skill. No worki
 
 One file per sprint at the backlog path from Step 2, `{nn}` = two-digit sprint number, in the form
 `templates/backlog.md` gives for the detected format. Same items, SP and acceptance criteria as the
-plan. Existing file with items: write `sprint-{nn}-backlog.proposed.md` instead and tell the user.
+plan. Keep each file identical in layout to the template: the title, then the goal line
+(`Sprint goal:` or `Sprint Goal:`) and the period line (`Period:` or `Periode:`) each on its own
+line with one blank line between them, then the table and the two sections. Existing file with
+items: write `sprint-{nn}-backlog.proposed.md` instead and tell the user. Existing file without
+items (only placeholder or commented-out rows, see Rules): overwrite it, no `.proposed.md`.
 
 ## Step 9: Report
 
 Tell the user, in their language: sprints and dates, total SP against total capacity, items per
-sprint, what did not fit, planner assumptions taken, files written. End the plan and your reply
+sprint, what did not fit, planner assumptions taken, open decisions, files written. End the plan and your reply
 with this line, translated into the language of each:
 
 "Next step: Lanewright Backlog Check verifies each sprint backlog and records your approval; then
