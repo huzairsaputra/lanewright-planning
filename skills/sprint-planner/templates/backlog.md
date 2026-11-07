@@ -2,8 +2,10 @@
 
 One file per sprint. `{nn}` is the two-digit sprint number in the file name and the title. Use the
 format for what `.claude/kit.json` has. Keep the table header, section headings and line labels
-exactly as shown: the workflow tool parses them. One row per item; acceptance criteria in one cell,
-separated by `; ` (or `<br>`). Never put a `|` inside a cell.
+exactly as shown, in every document language: the workflow tool parses them. Keep the layout
+identical too: the goal line and the period line each on its own line, with one blank line between
+them and around them, never joined into one line. One row per item; acceptance criteria in one
+cell, separated by `; ` (or `<br>`). Never put a `|` inside a cell.
 
 The ID uses the team code (`BE-1-S01-01`). The two mapped columns:
 
@@ -67,5 +69,10 @@ Periode: <mulai> – <selesai>
   "day 1–2" in the Dependencies section.
 - Period dates in the document language's usual form (`17 – 23 August 2026`, `17 – 23 Agustus 2026`).
 - The SP column holds a number only (2–10).
-- A file that already exists and has item rows is never overwritten: write
+- A file that already exists and has items is never overwritten: write
   `sprint-{nn}-backlog.proposed.md` beside it.
+- A file has items only when a row has real content in a cell other than ID and SP. A file whose
+  only rows are template placeholders (`<item>`, `<SP>`) or commented out, or whose table has no
+  rows, has no items: overwrite it and write no `.proposed.md`.
+- A QA item that tests another item in the same sprint says `Tests: <item ID>` in its criteria and
+  comes after that item.

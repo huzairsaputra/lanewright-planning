@@ -1,4 +1,5 @@
 import contextlib
+import hashlib
 import importlib.util
 import io
 import json
@@ -214,11 +215,89 @@ class BacklogCheckTest(unittest.TestCase):
         self.assertNotIn("NFR-07", out)  # a Source ID cell is not a definition and not cited
 
     def test_json_output(self):
-        code, out = self.run_cli(self.write("sprint-01-backlog.md", LANEWRIGHT), "--json")
+        path = self.write("sprint-01-backlog.md", LANEWRIGHT)
+        code, out = self.run_cli(path, "--json")
         self.assertEqual(code, 0, out)
         data = json.loads(out)
         self.assertEqual(data["verdict"], "READY")
         self.assertEqual(data["errors"], 0)
+        self.assertEqual(data["file_verdicts"], [{"file": path, "errors": 0, "warnings": 0, "verdict": "READY"}])
+
+    # verdict per file, placeholder-only official files
+    def test_verdict_per_file_and_twin_judged_separately(self):
+        official = self.write("sprint-01-backlog.md", LANEWRIGHT.replace("| ops-dev | 3 |", "| ops-dev | 4 |"))
+        proposed = self.write("sprint-01-backlog.proposed.md", LANEWRIGHT)
+        code, out = self.run_cli(official, proposed)
+        self.assertEqual(code, 0, out)
+        self.assertIn("VERDICT | %s | 0 error(s), 1 warning(s) | READY WITH WARNINGS\n" % official, out)
+        self.assertIn("VERDICT | %s | 0 error(s), 0 warning(s) | READY\n" % proposed, out)
+        self.assertTrue(out.endswith("| READY WITH WARNINGS\n"), out)  # SUMMARY stays the overall verdict
+        self.assertNotIn("placeholder-official", out)  # the official file has real items
+
+    def test_placeholder_official_when_proposal_has_items(self):
+        rows = ("| BE-1-S01-01 | <item title> | <region key or module; no kit.json: api, web or ops> "
+                "| <region's role, e.g. module-dev; no kit.json: BE-1> | 3 | <F-03 AC1: ...; AC2: ...> |\n")
+        head = LANEWRIGHT.split("| OPS-S01-01")[0]
+        proposed = self.write("sprint-01-backlog.proposed.md", LANEWRIGHT)
+        for body in (rows, "<!--\n" + rows + "-->\n"):  # template row, or the row commented out
+            official = self.write("sprint-01-backlog.md", head + body)
+            code, out = self.run_cli(official, proposed, "--srs", self.write("srs.md", SRS))
+            self.assertEqual(code, 1, out)
+            self.assertIn("ERROR | %s | - | placeholder-official | only template placeholders, but %s has 4 items: "
+                          "move the proposal into this file" % (official, proposed), out)
+            self.assertIn("VERDICT | %s | 0 error(s), 0 warning(s) | READY\n" % proposed, out)
+            self.assertIn("VERDICT | %s | " % official, out)
+            self.assertNotIn("F-03", out)  # a template example is not a citation
+        self.assertIn("| placeholder | the table has no item rows", out)
+        # without a proposal with items there is nothing to move
+        code, out = self.run_cli(self.write("sprint-01-backlog.md", head + rows))
+        self.assertEqual(code, 1, out)
+        self.assertNotIn("placeholder-official", out)
+
+    # vague wording, broad citations
+    def test_vague_when_only_digits_are_references(self):
+        for crit in ("F-01 AC1: the page works properly (BR-03, NFR-02, A-04)",
+                     "BE-1-S01-02 berfungsi untuk semua modul F-01",
+                     "Halaman pendaftaran berjalan dengan baik di portal"):
+            out = self.run_cli(self.write("sprint-01-backlog.md", LANEWRIGHT.replace(
+                "Every merge request runs lint and tests; a failing test blocks the merge", crit)))[1]
+            self.assertIn("| OPS-S01-01 | criteria-vague |", out, crit)
+        out = self.run_cli(self.write("sprint-01-backlog.md", LANEWRIGHT.replace(
+            "Every merge request runs lint and tests; a failing test blocks the merge",
+            "F-01 AC1: the page works properly and loads within 2 s")))[1]
+        self.assertNotIn("criteria-vague", out)
+
+    def test_broad_citation_and_weak_coverage(self):
+        text = LANEWRIGHT.replace("Every merge request runs lint and tests; a failing test blocks the merge",
+                                  "F-01, F-02, F-05 and NFR-01: every merge request runs lint and tests")
+        code, out = self.run_cli(self.write("sprint-01-backlog.md", text), "--srs", self.write("srs.md", SRS))
+        self.assertEqual(code, 0, out)
+        self.assertIn("WARN | %s | OPS-S01-01 | broad-citation | cites 4 requirement IDs"
+                      % os.path.join(self.dir, "sprint-01-backlog.md"), out)
+        self.assertIn("| coverage | all 3 F/CR requirements are cited, 1 only weakly\n", out)
+        self.assertIn("| coverage | weakly covered, cited only by items with more than 3 requirement IDs: F-05\n", out)
+        code, out = self.run_cli(self.write("sprint-01-backlog.md", LANEWRIGHT.replace(
+            "Registration API (F-01)", "Registration API (F-01–F-03)")))
+        self.assertNotIn("broad-citation", out)  # three IDs are not broad
+
+    # fingerprint
+    def test_sha256_same_for_crlf_and_lf(self):
+        lf = LANEWRIGHT.encode("utf-8")
+        crlf = lf.replace(b"\n", b"\r\n")
+        self.assertNotEqual(lf, crlf)
+        self.assertEqual(backlog_check.fingerprint(crlf), backlog_check.fingerprint(lf))
+        self.assertEqual(backlog_check.fingerprint(lf), hashlib.sha256(lf).hexdigest())
+        hashes, path = [], os.path.join(self.dir, "sprint-01-backlog.md")
+        for data in (lf, crlf):
+            with open(path, "wb") as f:
+                f.write(data)
+            code, out = self.run_cli(path)
+            self.assertEqual(code, 0, out)
+            line = next(x for x in out.splitlines() if "| sha256 |" in x)
+            self.assertEqual(line.rsplit(" | ", 1)[0], "INFO | %s | - | sha256" % path)
+            hashes.append(line.rsplit(" | ", 1)[1])
+        self.assertEqual(hashes[0], hashes[1])
+        self.assertRegex(hashes[0], r"^[0-9a-f]{64}$")
 
     # usage
     def test_unreadable_file_exit_2(self):

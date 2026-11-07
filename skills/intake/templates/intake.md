@@ -1,11 +1,11 @@
 <!--
 Layout of docs/requirements/intake.md. Translate every heading, label, table header, the Next
 step line and the fixed phrases ("no answer — default taken", "not asked", "Round 2 skipped: no
-answers in round 1", "to confirm", "date to confirm", "not described in the sources", "no source")
-into the document language (the language of the sources). Keep the kind tags, citation forms,
-S/Q/A numbering, the word ASSUMPTION and the "Kind:" line exactly as shown, so the SRS skill can
-parse them. The Kind value is always new-application or change-request in English; a label in
-the document language may follow it. Delete these comments.
+answers in round 1", "to confirm", "date to confirm", "not described in the sources", "no source",
+"Context, not sources") into the document language (the language of the sources). Keep the kind
+tags, citation forms, S/Q/A numbering, the word ASSUMPTION and the "Kind:" line exactly as shown,
+so the SRS skill can parse them. The Kind value is always new-application or change-request in
+English; a label in the document language may follow it. Delete these comments.
 -->
 
 # Intake — <project name>
@@ -35,6 +35,11 @@ sections), [S3 "Caption" image 4], [S4 2026-03-02 14:05], [interview Q3], [reque
 | S1 | <file name, folder path, Drive link title, "pasted text" or "one-line brief"> | PDF | 2026-03-02 | <role or unit> | <pages read, skipped parts, quality> |
 | S2 | ... | DOCX | unknown | unknown | ... |
 
+<!-- Only when the user gave just a brief inside an existing repository and did not confirm its
+files as sources (no answer counts as no). No fact cites these, and they never change the Kind. -->
+
+Context, not sources: `<file or folder>`, `<file or folder>`
+
 ## Facts
 
 <!-- One line per fact: "- [kind] statement [citation]". Keep the groups in this order. A group
@@ -56,6 +61,9 @@ with neither. -->
 ### Priorities
 
 - [priority] <feature that must exist at launch> [interview Q1]
+
+<!-- Q1 got no answer: no [priority] lines; write the gap line instead, pointing to the ASSUMPTION
+that holds the proposed must-haves. -->
 
 ### Business rules
 
@@ -92,6 +100,10 @@ with neither. -->
 <!-- Gap line, when the group has no facts: -->
 
 - Gap G4: <what is missing> — see Gaps
+
+### Team
+
+- [team] <role, number of people, availability or part-time share, planned leave> [interview Q4]
 
 ### Stakeholders
 

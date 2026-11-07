@@ -6,13 +6,16 @@ Usage:
 
 Reads Lanewright backlogs (| ID | Item | Region / module | Owner | SP | Acceptance criteria |) and
 scrum-kit backlogs (| ID | Item | Wilayah / modul | PIC | SP | Kriteria penerimaan |), including
-.proposed.md files. Prints one line per finding, "SEVERITY | file | item-id or - | rule | detail",
-then a summary line. Exit 0: no ERROR; 1: at least one ERROR; 2: usage error or unreadable file.
-A file and its .proposed.md twin are alternatives, so IDs are not compared between the two.
+.proposed.md files. Prints one line per finding, "SEVERITY | file | item-id or - | rule | detail"
+(each file also gets "INFO | file | - | sha256 | <hex>", SHA-256 of its content with CRLF as LF),
+then "VERDICT | file | counts | verdict" per file and a SUMMARY line. Exit 0: no ERROR; 1: at least
+one ERROR; 2: usage error or unreadable file. A file and its .proposed.md twin are alternatives:
+IDs are not compared between the two and each gets its own verdict.
 
 Python 3.8+, standard library only. Never writes a file.
 """
 
+import hashlib
 import json
 import os
 import re
@@ -35,8 +38,11 @@ PERIOD_RE = re.compile(r"^(?:[-*]\s+)?\**(?:period|periode)\s*:\s*\**(.*)$", re.
 DEPS_RE = re.compile(r"^(#{1,6})\s+(?:dependencies and risks|ketergantungan dan risiko)\s*$", re.I)
 HEADING_RE = re.compile(r"^(#{1,6})\s")
 VAGUE_RE = re.compile(r"\b(works|working|properly|correctly|good|fast|quickly|nice|user-friendly|appropriate|etc"
-                      r"|and so on|baik|benar|cepat|bagus|sesuai|dll|dan seterusnya)\b", re.I)
+                      r"|and so on|berjalan dengan baik|berfungsi|baik|benar|cepat|bagus|sesuai|dll|dan seterusnya)\b", re.I)
 QUOTED_RE = re.compile(r"`[^`]+`|\"[^\"]+\"|“[^”]+”")
+# references, whose digits are not measurable values: F-01, A-04, AC1, BE-1-S01-02
+ID_REF_RE = re.compile(r"\b(?:(?:F|NFR|CR|BR|UC|A|PA|OQ)-\d{1,3}|AC\d+|[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*-S\d{2}-\d{2})\b")
+MAX_REFS = 3  # an item citing more requirement IDs is broad and covers them only weakly
 REQ = r"(?:F|NFR|CR|BR|UC)-\d{2}"
 REQ_RE = re.compile(r"\b(F|NFR|CR|BR|UC)-(\d{2})\b")
 RANGE_RE = re.compile(r"\b(F|NFR|CR|BR|UC)-(\d{2})\s*(?:–|—|\.\.)\s*(?:(F|NFR|CR|BR|UC)-)?(\d{2})\b")
@@ -49,12 +55,20 @@ class UsageError(Exception):
     pass
 
 
-def read(path):
+def read(path, raw=False):
+    """Text with LF newlines, or (text, bytes) when raw."""
     try:
-        with open(path, encoding="utf-8-sig") as f:
-            return f.read()
+        with open(path, "rb") as f:
+            data = f.read()
+        text = data.decode("utf-8-sig").replace("\r\n", "\n").replace("\r", "\n")
     except (OSError, UnicodeDecodeError) as e:
         raise UsageError("cannot read %s: %s" % (path, e))
+    return (text, data) if raw else text
+
+
+def fingerprint(data):
+    """SHA-256 of the content with CRLF as LF, the same on every OS."""
+    return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
 
 
 def cells(line):
@@ -74,7 +88,9 @@ def clean_id(value):
 
 def parse_backlog(text):
     """{format, rows: [(line no, cells)], goal, period, deps, first_header}. deps is None when the
-    section is missing, False when it is empty (template placeholders count as empty)."""
+    section is missing, False when it is empty (template placeholders count as empty). A comment
+    starting a line is blanked: a commented-out row is no row."""
+    text = re.sub(r"(?ms)^[ \t]*<!--.*?-->", lambda m: "\n" * m.group(0).count("\n"), text)
     lines = text.splitlines()
     out = {"format": None, "rows": [], "goal": None, "period": None, "deps": None, "first_header": None}
     i = 0
@@ -179,7 +195,7 @@ def twin(path):
 
 
 def check_row(add, path, fmt, no, row, m_file, seen, kit, srs):
-    """Check one item row; returns (SP or 0, cited requirement IDs)."""
+    """(SP or 0, cited requirement IDs, real) for one row; real: a cell besides ID and SP is no placeholder."""
     item = clean_id(row[0]) or "line %d" % no
     if len(row) != 6:
         add("ERROR", path, item, "columns", "line %d has %d cells, expected 6 (a | inside a cell?)" % (no, len(row)))
@@ -229,28 +245,33 @@ def check_row(add, path, fmt, no, row, m_file, seen, kit, srs):
         if len(crit) < MIN_CRITERIA:
             add("WARN", path, item, "criteria-short", "acceptance criteria under %d characters" % MIN_CRITERIA)
         vague = VAGUE_RE.search(crit)
-        if vague and not re.search(r"\d", crit) and not QUOTED_RE.search(crit):
+        if vague and not re.search(r"\d", ID_REF_RE.sub("", crit)) and not QUOTED_RE.search(crit):
             add("WARN", path, item, "criteria-vague", "vague word %r and no number or quoted value" % vague.group(0))
     refs = set()
     for value in row[1:]:
-        refs |= cited(value)
+        refs |= cited(PLACEHOLDER_RE.sub("", value))  # a template example is no citation
+    if len(refs) > MAX_REFS:
+        add("WARN", path, item, "broad-citation", "cites %d requirement IDs (over %d): split the item"
+            % (len(refs), MAX_REFS))
     if srs is not None:
         for ref in sorted(refs - srs):
             add("WARN", path, item, "trace", "%s is not defined in the SRS" % ref)
-    return points, refs
+    real = any(re.sub(r"[\s*_]", "", PLACEHOLDER_RE.sub("", CODE_SPAN_RE.sub("x", row[k]))) for k in (1, 2, 3, 5))
+    return points, refs, real
 
 
 def check(paths, kit_path=None, srs_path=None):
     """[(severity, file, item, rule, detail)]. Raises UsageError for unreadable input."""
-    texts = [(p, read(p)) for p in paths]
+    texts = [(p,) + read(p, raw=True) for p in paths]
     kit = load_kit(kit_path) if kit_path else None
     srs = srs_ids(read(srs_path)) if srs_path else None
-    found, seen, all_cited = [], {}, set()
+    found, seen, all_cited, focused, real = [], {}, set(), set(), {}
 
     def add(sev, path, item, rule, detail):
         found.append((sev, path, item or "-", rule, detail))
 
-    for path, text in texts:
+    for path, text, data in texts:
+        add("INFO", path, None, "sha256", fingerprint(data))
         b = parse_backlog(text)
         if b["format"] is None:
             got = ("first table header: %s" % b["first_header"]) if b["first_header"] else "no table found"
@@ -265,21 +286,35 @@ def check(paths, kit_path=None, srs_path=None):
             elif PLACEHOLDER_RE.search(CODE_SPAN_RE.sub("", value)):
                 add("ERROR", path, None, "placeholder", "%s line still has a template placeholder" % label)
         m_file = FILE_SPRINT_RE.search(os.path.basename(path))
-        total = 0
+        total = real[path] = 0
         for no, row in b["rows"]:
-            points, refs = check_row(add, path, b["format"], no, row, m_file, seen, kit, srs)
+            points, refs, is_real = check_row(add, path, b["format"], no, row, m_file, seen, kit, srs)
             total += points
+            real[path] += is_real
             all_cited |= refs
+            if len(refs) <= MAX_REFS:
+                focused |= refs
+        if not b["rows"]:
+            add("ERROR", path, None, "placeholder", "the table has no item rows")
         if len(b["rows"]) > 3 and not b["deps"]:
             add("WARN", path, None, "deps", "Dependencies and risks section is %s with %d items"
                 % ("empty" if b["deps"] is False else "missing", len(b["rows"])))
         add("INFO", path, None, "total-sp", "%d SP in %d items" % (total, len(b["rows"])))
+    for path in paths:
+        prop = next((p for p in paths if p != path and twin(p) == twin(path) and real.get(p)), None)
+        if real.get(path) == 0 and not re.search(r"\.proposed\.md$", path, re.I) and prop:
+            add("ERROR", path, None, "placeholder-official", "only template placeholders, but %s has %d items: "
+                "move the proposal into this file (the checker never edits files)" % (prop, real[prop]))
     if srs is not None:
         wanted = sorted(i for i in srs if i.startswith(("F-", "CR-")))
         missing = [i for i in wanted if i not in all_cited]
+        weak = [i for i in wanted if i in all_cited and i not in focused]
         detail = ("not cited by any item: " + ", ".join(missing)) if missing else \
-            "all %d F/CR requirements are cited" % len(wanted)
+            "all %d F/CR requirements are cited" % len(wanted) + (", %d only weakly" % len(weak) if weak else "")
         add("INFO", srs_path, None, "coverage", detail)
+        if weak:
+            add("INFO", srs_path, None, "coverage", "weakly covered, cited only by items with more than %d "
+                "requirement IDs: %s" % (MAX_REFS, ", ".join(weak)))
     return found
 
 
@@ -288,6 +323,15 @@ def summary(found, nfiles):
     verdict = "NOT READY" if count["ERROR"] else "READY WITH WARNINGS" if count["WARN"] else "READY"
     return count, verdict, "SUMMARY | %d file(s) | %d error(s), %d warning(s), %d info | %s" % (
         nfiles, count["ERROR"], count["WARN"], count["INFO"], verdict)
+
+
+def file_verdicts(found, paths):
+    """[(file, errors, warnings, verdict)]; a .proposed.md twin is judged on its own."""
+    out = []
+    for p in paths:
+        count, verdict, _ = summary([f for f in found if f[1] == p], 1)
+        out.append((p, count["ERROR"], count["WARN"], verdict))
+    return out
 
 
 def run(argv):
@@ -310,13 +354,16 @@ def run(argv):
         raise UsageError("no backlog file given")
     found = check(paths, opts["--kit"], opts["--srs"])
     count, verdict, line = summary(found, len(paths))
+    per_file = file_verdicts(found, paths)
     if as_json:
         keys = ("severity", "file", "item", "rule", "detail")
         text = json.dumps({"files": paths, "findings": [dict(zip(keys, f)) for f in found],
+                           "file_verdicts": [dict(zip(("file", "errors", "warnings", "verdict"), v)) for v in per_file],
                            "errors": count["ERROR"], "warnings": count["WARN"], "verdict": verdict},
                           ensure_ascii=False, indent=2) + "\n"
     else:
-        text = "".join("%s | %s | %s | %s | %s\n" % f for f in found) + line + "\n"
+        text = ("".join("%s | %s | %s | %s | %s\n" % f for f in found)
+                + "".join("VERDICT | %s | %d error(s), %d warning(s) | %s\n" % v for v in per_file) + line + "\n")
     return (1 if count["ERROR"] else 0), text
 
 
@@ -348,6 +395,7 @@ def self_test():
         good = write("sprint-01-backlog.md", SAMPLE)
         code, out = run([good])
         assert code == 0 and out.endswith("| READY\n") and "8 SP in 2 items" in out, out
+        assert "| - | sha256 | " in out and "VERDICT | %s | 0 error(s), 0 warning(s) | READY\n" % good in out, out
         bad = write("sprint-02-backlog.md", SAMPLE.replace("| 5 |", "| 13 |").replace("goal: A", "goal: <x>"))
         code, out = run([bad])
         assert code == 1 and "| sp |" in out and "| placeholder |" in out and "S01 differs" in out, out

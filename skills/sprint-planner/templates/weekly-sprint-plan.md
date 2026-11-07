@@ -31,6 +31,7 @@ each into a page break before a sprint.
 | Appendix A. Scrum event templates | Lampiran A. Templat Acara Scrum |
 | Field / Content | Ruas / Isi |
 | Planner assumptions / to confirm / date to confirm | Asumsi perencanaan / perlu dikonfirmasi / tanggal perlu dikonfirmasi |
+| Open decisions for the product owner | Keputusan terbuka untuk product owner |
 | Sprint report recipient | Penerima laporan sprint |
 | Next step: Lanewright Backlog Check verifies each sprint backlog and records your approval; then run the sprints with ... or the free scrum-kit ... | Langkah berikutnya: Lanewright Backlog Check memeriksa setiap backlog sprint dan mencatat persetujuan Anda; lalu jalankan sprint dengan ... atau scrum-kit gratis ... |
 -->
@@ -63,6 +64,21 @@ each into a page break before a sprint.
 Planner assumptions (defaults taken without an answer):
 
 - PA-01 <statement> — to confirm with <role>
+
+<!-- Only when the repository's rules ask for another language than the sources: -->
+
+- PA-02 Documents follow the language of the sources (<language>), not <language> as the repository
+  rules ask — to confirm with <role>
+
+<!-- Only when the project's rules say implementers write no tests and QA tests in the next sprint. -->
+
+Open decisions for the product owner:
+
+- <The project's rules let QA test only in the sprint after the implementation; the Definition of
+  Done needs passing tests within the sprint, and the last sprint would end untested.> Options:
+  (a) add a week; (b) accept the items without tests for now; (c) QA tests in the same sprint after
+  the paired implementation item merges. Planned until decided: (c), each QA item after the item it
+  tests, with `Tests: <item ID>` in its text.
 
 ### 1.4 Date assumptions
 
@@ -112,7 +128,7 @@ Planner assumptions (defaults taken without an answer):
 | BE-1 | 1 / <repository or area> | 10 SP | ... |
 | FE-1 | 1 / ... | 10 SP | ... |
 | OPS | 1 / ... | 10 SP | ... |
-| **Total** | <P> | <C> SP | 10 SP per person per full week; 6 SP for a week of 4 working days or fewer; part-time pro rata (half time → 5 SP) |
+| **Total** | <P> | <C> SP | 10 SP per person per full week; 6 SP for a week of 4 working days or fewer; part-time pro rata (half time → 5 SP); about 10% of each sprint's team capacity kept free |
 
 <!-- Only when capacity changes between sprints. -->
 

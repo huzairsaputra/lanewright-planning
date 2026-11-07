@@ -2,7 +2,7 @@
 name: lanewright-intake
 description: Turns raw project input (PDF, DOCX, Markdown, text, images, screenshots, chat exports, a local folder, a Google Drive folder, pasted text or a single line describing the idea) into one evidence file, docs/requirements/intake.md, where every fact carries a kind tag and a source citation, gaps are listed, a short interview fills what is missing and anything still unknown is labelled ASSUMPTION. Use when the user wants to collect, read or summarize project documents before writing requirements, asks to start a new project or change request from loose material, or asks for an intake, requirements gathering or a fact base for an SRS.
 summary: Raw project material in, one cited evidence file out, with gaps, a two-round interview and explicit assumptions, ready for an SRS and a sprint plan.
-version: 1.0.0
+version: 1.0.1
 tags: [requirements, intake, business-analysis, srs, project-planning, documentation]
 keywords: [requirements gathering, evidence file, source citation, stakeholder interview, project intake, change request, docx extraction, assumptions log]
 use_cases:
@@ -30,7 +30,8 @@ writing; it is the exact layout.
   the language of most source text; a one-line input: that line's language. The user may override
   it. Translate every heading, table header and fixed line, including "Next step" and the fixed
   phrases "no answer — default taken", "not asked", "round 2 skipped", "to confirm", "date to
-  confirm", "not described in the sources" and "no source"; quote sources in their own language.
+  confirm", "not described in the sources", "no source" and "context, not sources"; quote sources
+  in their own language.
   Keywords stay English: kind tags, `ASSUMPTION`, and `Kind:` with its value (Step 3).
 - **Data hygiene.** Keep API paths, ports and field names. Drop hosts, IP addresses, credentials,
   tokens and personal values (ID numbers, phone numbers, addresses, health or financial details).
@@ -55,7 +56,7 @@ Number every source `S1`, `S2`, ... in the order you read them.
 | Image, screenshot | Read natively and describe what the screen or diagram shows. If you cannot read images, list each one under Gaps ("image not read: ...") |
 | DOCX | Run `scripts/docx_text.py` (below). It prints headings, lists, tables and `[image N: ...]` markers in body order |
 | Markdown, text, CSV, chat export (WhatsApp/Telegram text or JSON) | Read as text. Chat messages are cited by date and time |
-| Code and config files | Sources like any other (`.claude/kit.json` included). A file that only generates another source (same text): cite the generated document only |
+| Code and config files | Sources like any other (`.claude/kit.json` included), except when the user gave only a brief inside an existing repository (below). A file that only generates another source (same text): cite the generated document only |
 | Other formats (XLSX, PPTX, ODT) | Read them if your tools can; otherwise list them under Gaps |
 | Local folder | Walk it recursively. Skip `.git`, `.venv`, `node_modules`, `vendor`, `__pycache__`, build output and binaries (archives, executables, media other than images). Show the user the file list before reading more than 30 files |
 | Google Drive folder or link | Use your Google Drive connector (list, then read or export each file). No connector: say so and ask the user to download the folder or paste the files |
@@ -65,6 +66,13 @@ Number every source `S1`, `S2`, ... in the order you read them.
 For each source fill the Sources table: type, date (from the document, else "unknown"), author (role
 or organisation unit as printed, else "unknown"), notes (pages read, reading method, what was
 skipped, quality).
+
+**A brief inside an existing repository.** When the user gives only a brief (a line or pasted
+text) and you are working inside a repository that already has files, ask once, before extracting
+facts: "Are the files in this repository (code, config, CI, project rules such as CLAUDE.md)
+sources for this intake? (default: no, context only)". Yes: read them as sources. No, or no answer:
+do not cite them; list them under "Context, not sources" below the Sources table, and do not let
+them switch the project kind from new application to change request (Step 3).
 
 ### Running scripts/docx_text.py
 
@@ -86,7 +94,8 @@ Group facts by kind, in this order:
 
 `goal`, `actor`, `feature`, `priority` (a must-have for launch), `rule` (business rule), `data`,
 `screen` (screen or design), `integration`, `constraint` (legal, hardware, stack, hosting), `nfr`
-(non-functional), `timeline` (deadlines, milestones), `budget`, `stakeholder`.
+(non-functional), `timeline` (deadlines, milestones), `budget`, `team` (people, roles,
+availability), `stakeholder`.
 
 - One fact per line, stated as the source states it. Do not merge two sources into one fact; when
   they agree, cite both `[S1 p.3; S2 §4]`. When they conflict, write both and add a Gap.
@@ -102,14 +111,17 @@ Group facts by kind, in this order:
 
 Write the line `Kind: new-application` or `Kind: change-request` (always these English keywords; a
 label in the document language may follow), then the one-line reason with its citation. Mixed
-input: pick the dominant kind and note the rest. The SRS skill reads this line to pick its outline.
+input: pick the dominant kind and note the rest. Only sources decide the kind: repository files
+listed as context, not sources, never make it a change request. The SRS skill reads this line to
+pick its outline.
 
 ## Step 4: Gaps
 
 List what an SRS and a sprint plan need but the sources do not say. Always check: goal and success
 measure, actors and their permissions, core features and which are must-haves at launch, data
 owned and shared, integrations, legal and security constraints, hosting and stack, deadline, team
-(roles, people), budget, acceptance owner. Each gap: what is missing, and why it matters.
+(roles, people, availability), budget, acceptance owner. Each gap: what is missing, and why it
+matters.
 
 ## Step 5: Interview (at most two rounds)
 
@@ -120,6 +132,9 @@ features, deadline, team.
   and team, then the rest. Ask the top 6 per round.
 - Round 1 always asks "Which 3–5 features must exist at launch?" (default: the core flows you
   infer, shown as a proposal). Record the answer as `priority` facts cited `[interview Qn]`.
+  No answer: like every other default, the proposed must-haves become `ASSUMPTION A-nn` and the
+  intake has no `priority` facts, so the SRS rule "every `priority` fact has a Must requirement"
+  has nothing to check and the SRS sets priorities by its own rule.
 - Every question carries a proposed default: "Who signs off the release? (default: the head of the
   requesting unit)". The user may answer "defaults" to accept them all.
 - Number questions `Q1`, `Q2`, ... across both rounds. Answers become facts cited `[interview Qn]`.

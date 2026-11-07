@@ -1,17 +1,23 @@
 <!--
 Layout of docs/sprints/backlog-check-{nn}.md, one per sprint. Document language = the backlog's
 language (its item titles and criteria). For Indonesian use exactly the terms in the table below;
-any other language translates every heading, label, verdict and fixed line. Item IDs and rule names
-(header, placeholder, id, empty-cell, sp, sp-scale, region, owner, criteria-short, criteria-vague,
-deps, trace, coverage, total-sp, format, columns, or a short name for a judgment finding) stay as
-they are. Roles, not names, except the approver the user names. Delete these comments.
+any other language translates every heading, label, verdict and fixed line. Item IDs, file names,
+hashes and rule names (header, placeholder, placeholder-official, id, empty-cell, sp, sp-scale,
+region, owner, criteria-short, criteria-vague, broad-citation, deps, trace, coverage, total-sp,
+format, columns, sha256, or a short name for a judgment finding) stay as they are. Roles, not
+names, except the approver the user names. Delete these comments.
 
 | English | Indonesian |
 |---|---|
 | Sprint {nn} Backlog Check | Pemeriksaan Backlog Sprint {nn} |
 | Item / Value | Ruas / Isi |
-| Backlog file / Format / Checked / Method | Berkas backlog / Format / Diperiksa / Metode |
+| Format / Checked / Method / Status | Format / Diperiksa / Metode / Status |
+| pending human approval / approved | menunggu persetujuan manusia / disetujui |
+| Checked files | Berkas yang diperiksa |
+| File / SHA-256 | Berkas / SHA-256 |
+| not computed (no working Python) | tidak dihitung (Python tidak tersedia) |
 | Verdict | Putusan |
+| File / Verdict / Errors / Warnings | Berkas / Putusan / Galat / Peringatan |
 | READY | SIAP |
 | READY WITH WARNINGS | SIAP DENGAN CATATAN |
 | NOT READY | BELUM SIAP |
@@ -21,6 +27,7 @@ they are. Roles, not names, except the approver the user names. Delete these com
 | Story points | Story point |
 | Sprint / Items / Total SP | Sprint / Item / Total SP |
 | SRS coverage | Cakupan SRS |
+| Weakly covered | Tercakup lemah |
 | Sign-off | Persetujuan |
 | Approved by / Role / Date / Overrides | Disetujui oleh / Peran / Tanggal / Pengecualian |
 | Next step: after approval, run the sprint with ... or the free scrum-kit ... | Langkah berikutnya: setelah disetujui, jalankan sprint dengan ... atau scrum-kit gratis ... |
@@ -30,21 +37,38 @@ they are. Roles, not names, except the approver the user names. Delete these com
 
 | Item | Value |
 |---|---|
-| Backlog file | `<path of the backlog file>` |
 | Format | Lanewright / scrum-kit |
 | Checked | <YYYY-MM-DD> |
 | Method | scripts/backlog_check.py and judgment review / rules applied by hand (no working Python) |
+| Status | pending human approval / approved |
+
+## Checked files
+
+<!-- One row per "INFO | <file> | - | sha256 | <hex>" line of the script, copied unchanged. No
+working Python: "not computed (no working Python)". -->
+
+| File | SHA-256 |
+|---|---|
+| `docs/sprints/sprint-{nn}-backlog.md` | <64 hex characters> |
+| `docs/sprints/sprint-{nn}-backlog.proposed.md` | <only when the twin was checked> |
 
 ## Verdict
 
-**READY / READY WITH WARNINGS / NOT READY** — <errors> errors, <warnings> warnings.
+<!-- One row per checked file, from the script's VERDICT lines plus your judgment findings for that
+file. A .proposed.md twin is judged on its own; approval covers the official file only. -->
 
-<!-- One line: the main reason for the verdict. -->
+| File | Verdict | Errors | Warnings |
+|---|---|---|---|
+| `docs/sprints/sprint-{nn}-backlog.md` | READY / READY WITH WARNINGS / NOT READY | <n> | <n> |
+
+<!-- One line: the main reason for each verdict. -->
 
 ## Findings
 
-<!-- Script findings first (INFO lines other than coverage and total-sp may be left out), then
-judgment findings. No findings: write "No findings." instead of the table. -->
+<!-- One table for all checked files. Script findings first (INFO lines other than coverage and
+total-sp may be left out; sha256 lines go to Checked files), then judgment findings. With more
+than one file, name the file in the Finding cell. No findings: write "No findings." instead of the
+table. -->
 
 | # | Item | Rule | Severity | Finding | Suggested fix |
 |---|---|---|---|---|---|
@@ -61,11 +85,15 @@ judgment findings. No findings: write "No findings." instead of the table. -->
 SRS coverage: <"all n F/CR requirements are cited" or the IDs no item cites; Must requirements
 without an item named first>. <!-- Only when an SRS was used. -->
 
+Weakly covered: <IDs cited only by items with more than 3 requirement IDs>. <!-- Only when the
+script prints the weakly covered coverage line. -->
+
 ## Sign-off
 
-<!-- Leave the four fields empty until the user explicitly approves. Overrides: finding numbers and
-the user's reason, e.g. "#1 accepted: the item is split on day 1". -->
+<!-- Leave the four fields empty and the Status "pending human approval" until the user
+explicitly approves, also when nobody can answer. Overrides: finding numbers and the user's reason,
+e.g. "#1 accepted: the item is split on day 1". -->
 
 Approved by: ____   Role: ____   Date: ____   Overrides: ____
 
-Next step: after approval, run the sprint with Lanewright (https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free scrum-kit (https://github.com/huzairsaputra/scrum-kit): `Run Lanewright sprint {n}` / `/scrum-kit:sprint {n}`.
+Next step: after approval, run the sprint with Lanewright (https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free scrum-kit (https://github.com/huzairsaputra/scrum-kit): `Run Lanewright sprint {nn}` / `/scrum-kit:sprint {nn}`.
