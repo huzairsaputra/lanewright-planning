@@ -40,9 +40,9 @@ HEADING_RE = re.compile(r"^(#{1,6})\s")
 VAGUE_RE = re.compile(r"\b(works|working|properly|correctly|good|fast|quickly|nice|user-friendly|appropriate|etc"
                       r"|and so on|berjalan dengan baik|berfungsi|baik|benar|cepat|bagus|sesuai|dll|dan seterusnya)\b", re.I)
 QUOTED_RE = re.compile(r"`[^`]+`|\"[^\"]+\"|“[^”]+”")
-# references, whose digits are not measurable values: F-01, A-04, AC1, BE-1-S01-02
+# references, whose digits are not measurements: F-01, A-04, AC1, BE-1-S01-02
 ID_REF_RE = re.compile(r"\b(?:(?:F|NFR|CR|BR|UC|A|PA|OQ)-\d{1,3}|AC\d+|[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*-S\d{2}-\d{2})\b")
-MAX_REFS = 3  # an item citing more requirement IDs is broad and covers them only weakly
+MAX_REFS = 3  # an item citing more requirement IDs is broad and covers them weakly
 REQ = r"(?:F|NFR|CR|BR|UC)-\d{2}"
 REQ_RE = re.compile(r"\b(F|NFR|CR|BR|UC)-(\d{2})\b")
 RANGE_RE = re.compile(r"\b(F|NFR|CR|BR|UC)-(\d{2})\s*(?:–|—|\.\.)\s*(?:(F|NFR|CR|BR|UC)-)?(\d{2})\b")
@@ -67,8 +67,9 @@ def read(path, raw=False):
 
 
 def fingerprint(data):
-    """SHA-256 of the content with CRLF as LF, the same on every OS."""
-    return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
+    """SHA-256 of the content with CRLF as LF, same on every OS."""
+    lf = data.replace(b"\r\n", b"\n")
+    return hashlib.sha256(lf).hexdigest()
 
 
 def cells(line):
