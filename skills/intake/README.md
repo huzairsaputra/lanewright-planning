@@ -5,7 +5,7 @@ exports, a folder, a Google Drive folder, pasted notes, or just one sentence) an
 `docs/requirements/intake.md`: one evidence file where every fact has a source citation.
 
 - Facts grouped by kind: goals, actors, features, business rules, data, screens, integrations,
-  constraints, non-functional needs, timeline, budget, stakeholders.
+  constraints, non-functional needs, timeline, budget, team, stakeholders.
 - Every fact cites its source (`[S2 p.7]`, `[S1 §3.2]`, `[interview Q3]`); nothing is invented.
 - Lists what is missing, then asks at most two short rounds of questions, each with a proposed
   default. Anything still unknown is written down as an `ASSUMPTION`, never as a fact.
