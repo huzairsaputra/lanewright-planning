@@ -62,8 +62,8 @@ class TestRealBuild(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dist:
             self.assertEqual(quiet(build.main, [], dist), 0)
             zips = sorted(os.listdir(dist))
-            self.assertEqual(zips, ["lanewright-backlog-check-1.0.1.zip", "lanewright-intake-1.0.1.zip",
-                                    "lanewright-sprint-planner-1.0.1.zip", "lanewright-srs-1.0.0.zip"])
+            self.assertEqual(zips, ["lanewright-backlog-check-1.0.2.zip", "lanewright-intake-1.0.1.zip",
+                                    "lanewright-sprint-planner-1.0.2.zip", "lanewright-srs-1.0.0.zip"])
             expected = {"lanewright-intake": ["docx_text.py"], "lanewright-srs": ["md_to_docx.py"],
                         "lanewright-sprint-planner": ["md_to_docx.py"],
                         "lanewright-backlog-check": ["backlog_check.py"]}
@@ -87,6 +87,50 @@ class TestRealBuild(unittest.TestCase):
 
     def test_mapping_matches_skill_dirs(self):
         self.assertEqual(sorted(build.SKILLS), sorted(os.listdir(build.SKILLS_DIR)))
+
+
+def skill_text(*parts):
+    with open(os.path.join(build.SKILLS_DIR, *parts), encoding="utf-8") as f:
+        return f.read().replace("\r\n", "\n")
+
+
+def flat(text):
+    return " ".join(text.split())
+
+
+class TestDodContract(unittest.TestCase):
+    """Labels other tools read: the plan's DoD proposals and the sign-off field (and the foundation rule)."""
+
+    def test_plan_proposes_dod_items_that_may_not_apply(self):
+        plan = skill_text("sprint-planner", "templates", "weekly-sprint-plan.md")
+        self.assertIn("\n### 4.3 Definition of Done: items that may not apply\n", plan)
+        self.assertIn("| 4.3 Butir Definition of Done yang mungkin tidak berlaku |", plan)
+        self.assertIn("\n| DoD item | Why it may not apply | SRS reference |\n", plan)
+        section = plan.split("### 4.3")[1].split("\n## 5")[0]
+        self.assertNotIn("approved", section.split("-->")[1])  # the planner never approves
+        self.assertIn("plan section 4.3", flat(skill_text("sprint-planner", "SKILL.md")))
+
+    def test_sign_off_has_the_dod_field_after_overrides(self):
+        report = skill_text("backlog-check", "templates", "backlog-check.md")
+        self.assertIn("\nApproved by: ____   Role: ____   Date: ____   Overrides: ____\n"
+                      "DoD not applicable (approved): ____\n", report)
+        self.assertIn("| DoD not applicable (approved) / none | Butir DoD tidak berlaku (disetujui) / tidak ada |",
+                      report)
+        proposals = "\nDoD items proposed as not applicable (not approved until listed in the sign-off):\n"
+        self.assertLess(report.index(proposals), report.index("\nApproved by: ____"))
+        self.assertIn("An older report whose sign-off has no `DoD not applicable (approved)` field counts as "
+                      "none approved", flat(skill_text("backlog-check", "SKILL.md")))
+
+    def test_foundation_only_for_shared_module_and_tooling_roles(self):
+        planner = flat(skill_text("sprint-planner", "SKILL.md"))
+        self.assertIn('foundation (Indonesian "fondasi") may label only items owned by a shared-module or '
+                      'tooling role', planner)
+        self.assertIn('never called foundation, even when other items depend on it: write "first" or '
+                      '"dependency of <ID>" instead', planner)
+        self.assertNotIn("Foundations first", planner)
+        plan = flat(skill_text("sprint-planner", "templates", "weekly-sprint-plan.md"))
+        self.assertIn('"Foundation" (Indonesian "fondasi") labels only items owned by a shared-module or '
+                      'tooling role', plan)
 
 
 class TestInstall(unittest.TestCase):
