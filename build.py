@@ -88,14 +88,14 @@ def entries_for(name):
             errors.append("%s/%s resolves outside the skill directory" % (name, rel))
             continue
         with open(path, "rb") as f:
-            entries.append((rel, f.read()))
+            entries.append((rel, f.read().replace(b"\r\n", b"\n")))  # same zip on every OS (git may check out CRLF)
     for script in SKILLS[name]:
         rel = "scripts/" + script
         if any(e[0] == rel for e in entries):
             errors.append("%s/%s: keep scripts only in shared/scripts/" % (name, rel))
             continue
         with open(os.path.join(SHARED, script), "rb") as f:
-            entries.append((rel, f.read()))
+            entries.append((rel, f.read().replace(b"\r\n", b"\n")))
     return sorted(entries), errors
 
 
