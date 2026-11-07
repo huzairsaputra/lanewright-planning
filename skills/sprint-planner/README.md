@@ -5,8 +5,8 @@ use: `docs/sprints/weekly-sprint-plan.md` plus a Word copy, and one backlog file
 
 - Asks a few questions (start Monday, end date, team roles, capacity, holidays, milestones), each
   with a proposed default.
-- Splits requirements into items of 2–10 story points, foundations first (repository, CI, schema,
-  auth), then features in dependency order. Every item has an owner role and testable acceptance
+- Splits requirements into items of 2–10 story points, setup first (repository, CI, schema, auth),
+  then features in dependency order. Every item has an owner role and testable acceptance
   criteria from the SRS.
 - Monday–Sunday sprints with day numbers across the project. No sprint is ever booked above its
   capacity; what does not fit moves later and is reported.
