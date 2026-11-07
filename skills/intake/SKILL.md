@@ -20,14 +20,18 @@ writing; it is the exact layout.
 ## Rules
 
 - **No fact without a citation.** Every fact line ends with its source: `[S2 p.7]`, `[S1 §3.2]`,
-  `[S3 "Keterangan" image 4]`, `[S4 2026-03-02 14:05]` (chat message), `[interview Q3]`, and
-  `[request]` for the user's own request or instructions.
+  `[S1 "Heading"]` (Markdown or DOCX heading without a number), `[S1]` (one-line brief or any source
+  without sections), `[S3 "Keterangan" image 4]`, `[S4 2026-03-02 14:05]` (chat message),
+  `[interview Q3]`, and `[request]` for the user's own words. `[request]` gets the row
+  `S0 | the user's request | request | <date> | user` in the Sources table; S0 is not counted.
 - **Assumptions are labelled.** Anything you or the user decide without a source is
   `ASSUMPTION A-nn`, never a plain fact.
 - **Document language = the language of the source material**, not of the request. Mixed sources:
   the language of most source text; a one-line input: that line's language. The user may override
-  it. Translate every heading, table header and fixed line (including "Next step"); quote sources
-  in their own language.
+  it. Translate every heading, table header and fixed line, including "Next step" and the fixed
+  phrases "no answer — default taken", "not asked", "round 2 skipped", "to confirm", "date to
+  confirm", "not described in the sources" and "no source"; quote sources in their own language.
+  Keywords stay English: kind tags, `ASSUMPTION`, and `Kind:` with its value (Step 3).
 - **Data hygiene.** Keep API paths, ports and field names. Drop hosts, IP addresses, credentials,
   tokens and personal values (ID numbers, phone numbers, addresses, health or financial details).
   Record people by role when the source gives one, otherwise by the handle the source uses.
@@ -56,7 +60,7 @@ Number every source `S1`, `S2`, ... in the order you read them.
 | Local folder | Walk it recursively. Skip `.git`, `.venv`, `node_modules`, `vendor`, `__pycache__`, build output and binaries (archives, executables, media other than images). Show the user the file list before reading more than 30 files |
 | Google Drive folder or link | Use your Google Drive connector (list, then read or export each file). No connector: say so and ask the user to download the folder or paste the files |
 | Pasted text | One source, type "pasted text", dated today |
-| A single line ("Portal layanan publik digital terpadu (Superapps)") | One source, type "one-line brief". Expect a thin result and go to the interview |
+| A single line ("Portal layanan publik digital terpadu (Superapps)") | One source, type "one-line brief", cited `[S1]`. Expect a thin result and go to the interview |
 
 For each source fill the Sources table: type, date (from the document, else "unknown"), author (role
 or organisation unit as printed, else "unknown"), notes (pages read, reading method, what was
@@ -80,9 +84,9 @@ image markers (`[S1 image 3]`).
 Go through every source once, in order. Each fact is one line: `- [kind] statement [citation]`.
 Group facts by kind, in this order:
 
-`goal`, `actor`, `feature`, `rule` (business rule), `data`, `screen` (screen or design), `integration`,
-`constraint` (legal, hardware, stack, hosting), `nfr` (non-functional), `timeline` (deadlines,
-milestones), `budget`, `stakeholder`.
+`goal`, `actor`, `feature`, `priority` (a must-have for launch), `rule` (business rule), `data`,
+`screen` (screen or design), `integration`, `constraint` (legal, hardware, stack, hosting), `nfr`
+(non-functional), `timeline` (deadlines, milestones), `budget`, `stakeholder`.
 
 - One fact per line, stated as the source states it. Do not merge two sources into one fact; when
   they agree, cite both `[S1 p.3; S2 §4]`. When they conflict, write both and add a Gap.
@@ -96,28 +100,32 @@ milestones), `budget`, `stakeholder`.
 - **Change to an existing system**: a request letter, change note, bug list, "add/fix/change X in
   the current app", or screenshots of a running system with requested changes.
 
-Write the kind and the one-line reason with its citation. Mixed input: pick the dominant kind and
-note the rest. The SRS skill uses this to pick its outline.
+Write the line `Kind: new-application` or `Kind: change-request` (always these English keywords; a
+label in the document language may follow), then the one-line reason with its citation. Mixed
+input: pick the dominant kind and note the rest. The SRS skill reads this line to pick its outline.
 
 ## Step 4: Gaps
 
 List what an SRS and a sprint plan need but the sources do not say. Always check: goal and success
-measure, actors and their permissions, core features, data owned and shared, integrations, legal
-and security constraints, hosting and stack, deadline, team (roles, people), budget, acceptance
-owner. Each gap: what is missing, and why it matters.
+measure, actors and their permissions, core features and which are must-haves at launch, data
+owned and shared, integrations, legal and security constraints, hosting and stack, deadline, team
+(roles, people), budget, acceptance owner. Each gap: what is missing, and why it matters.
 
 ## Step 5: Interview (at most two rounds)
 
 Interview when the input is thin (one line, a short paste) or a key item is missing: actors, core
 features, deadline, team.
 
-- At most two rounds, three to six questions per round, most important first.
+- At most two rounds. Rank the gaps by impact: actors and must-have features first, then deadline
+  and team, then the rest. Ask the top 6 per round.
+- Round 1 always asks "Which 3–5 features must exist at launch?" (default: the core flows you
+  infer, shown as a proposal). Record the answer as `priority` facts cited `[interview Qn]`.
 - Every question carries a proposed default: "Who signs off the release? (default: the head of the
   requesting unit)". The user may answer "defaults" to accept them all.
 - Number questions `Q1`, `Q2`, ... across both rounds. Answers become facts cited `[interview Qn]`.
 - After two rounds, or when the user stops answering, every open item becomes `ASSUMPTION A-nn`
-  with the default you proposed. Gaps no question covered also become assumptions, marked
-  "not asked", each with a proposed default.
+  with the default you proposed. Gaps not asked also become assumptions, marked "not asked", each
+  with a proposed default. A skipped round 2 is the one line "Round 2 skipped: no answers in round 1".
 
 ## Step 6: Write and report
 

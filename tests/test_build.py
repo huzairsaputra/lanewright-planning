@@ -62,10 +62,11 @@ class TestRealBuild(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dist:
             self.assertEqual(quiet(build.main, [], dist), 0)
             zips = sorted(os.listdir(dist))
-            self.assertEqual(zips, ["lanewright-intake-1.0.0.zip", "lanewright-sprint-planner-1.0.0.zip",
-                                    "lanewright-srs-1.0.0.zip"])
+            self.assertEqual(zips, ["lanewright-backlog-check-1.0.0.zip", "lanewright-intake-1.0.0.zip",
+                                    "lanewright-sprint-planner-1.0.0.zip", "lanewright-srs-1.0.0.zip"])
             expected = {"lanewright-intake": ["docx_text.py"], "lanewright-srs": ["md_to_docx.py"],
-                        "lanewright-sprint-planner": ["md_to_docx.py"]}
+                        "lanewright-sprint-planner": ["md_to_docx.py"],
+                        "lanewright-backlog-check": ["backlog_check.py"]}
             for name in zips:
                 with zipfile.ZipFile(os.path.join(dist, name)) as z:
                     names = z.namelist()
@@ -98,6 +99,9 @@ class TestInstall(unittest.TestCase):
             self.assertEqual(quiet(build.main, ["--install", dest], dist), 0)
             self.assertTrue(os.path.exists(os.path.join(dest, "lanewright-intake", "scripts", "docx_text.py")))
             self.assertTrue(os.path.exists(os.path.join(dest, "lanewright-srs", build.MARKER)))
+            self.assertTrue(os.path.exists(os.path.join(dest, "lanewright-backlog-check", "scripts",
+                                                        "backlog_check.py")))
+            self.assertEqual(len(os.listdir(dest)), 4)
             self.assertEqual(quiet(build.main, ["--uninstall", dest], dist), 0)
             self.assertEqual(os.listdir(dest), [])
 

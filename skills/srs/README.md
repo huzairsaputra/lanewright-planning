@@ -16,8 +16,11 @@ Specification: `docs/requirements/srs.md` plus a Word copy, `srs.docx`.
 
 Try: "Run Lanewright SRS".
 
-Part of a free pipeline: **Intake → SRS → Sprint Planner**, then run the sprints with
-[Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or
-the free [scrum-kit](https://github.com/huzairsaputra/scrum-kit).
+Part of four free skills: **raw input → Intake → SRS → Sprint Planner → Backlog Check (human
+approval) → run the sprints** with [Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free
+[scrum-kit](https://github.com/huzairsaputra/scrum-kit).
+
+Install (free, from Agensi): Lanewright Intake, Lanewright SRS, Lanewright Sprint Planner and
+Lanewright Backlog Check.
 
 MIT licensed. Copyright (c) 2026 Huzair Saputra.

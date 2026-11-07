@@ -31,7 +31,8 @@ each into a page break before a sprint.
 | Appendix A. Scrum event templates | Lampiran A. Templat Acara Scrum |
 | Field / Content | Ruas / Isi |
 | Planner assumptions / to confirm / date to confirm | Asumsi perencanaan / perlu dikonfirmasi / tanggal perlu dikonfirmasi |
-| Next step: run the sprints with ... or with the free scrum-kit ... | Langkah berikutnya: jalankan sprint dengan ... atau dengan scrum-kit gratis ... |
+| Sprint report recipient | Penerima laporan sprint |
+| Next step: Lanewright Backlog Check verifies each sprint backlog and records your approval; then run the sprints with ... or the free scrum-kit ... | Langkah berikutnya: Lanewright Backlog Check memeriksa setiap backlog sprint dan mencatat persetujuan Anda; lalu jalankan sprint dengan ... atau scrum-kit gratis ... |
 -->
 
 # Weekly Sprint Plan — <project name>
@@ -74,9 +75,12 @@ Planner assumptions (defaults taken without an answer):
 
 ### 2.1 Roles
 
-- **Product owner:** <role>; owns the backlog and accepts increments.
-- **Scrum master / orchestrator:** <role>; runs events, removes blockers, guards capacity.
+- **Product owner:** <role; default: the client contact>; owns the backlog and accepts increments.
+- **Scrum master / orchestrator:** <role; default: the team lead>; runs events, removes blockers,
+  guards capacity.
 - **Developers:** <team codes, e.g. BE-1, FE-1, OPS>.
+- **Sprint report recipient:** <role; default: the product owner>; receives the report after each
+  Sprint Review.
 
 ### 2.2 Artefacts
 
@@ -89,10 +93,10 @@ Planner assumptions (defaults taken without an answer):
 | Event | Schedule | Duration | Participants | Output |
 |---|---|---|---|---|
 | Sprint Planning | Day 1 of each sprint (Monday), 09:00 | 1 hour | Whole team, product owner | Sprint goal and sprint backlog |
-| Daily Scrum | Every working day, <time> | 15 minutes | Developers | Plan for the day, blockers |
+| Daily Scrum | Every working day, <time; default 09:00 local> | 15 minutes | Developers | Plan for the day, blockers |
 | Backlog Refinement | Day 4 of each sprint (Thursday), 14:00 | 1 hour | Product owner, developers | Next sprint's items ready |
-| Sprint Review | Last working day of the sprint, <time> | 1 hour | Whole team, stakeholders | Accepted increment, feedback |
-| Sprint Retrospective | Last working day of the sprint, after the review | 45 minutes | Whole team | Up to three improvement actions |
+| Sprint Review | Last working day of the sprint, <time; default 14:00> | 1 hour | Whole team, stakeholders | Accepted increment, feedback, sprint report to <recipient> |
+| Sprint Retrospective | Last working day of the sprint, <time; default 15:00, after the review> | 45 minutes | Whole team | Up to three improvement actions |
 
 ### 2.4 Team working rules
 
@@ -231,4 +235,4 @@ Reporting: <who receives the sprint report, when, in what form>.
 | Dependencies | <IDs> |
 | Links | <SRS requirement IDs, designs, merge request> |
 
-Next step: run the sprints with Lanewright (https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams): "Run Lanewright sprint 1", or with the free scrum-kit (https://github.com/huzairsaputra/scrum-kit): `/scrum-kit:sprint 1`.
+Next step: Lanewright Backlog Check verifies each sprint backlog and records your approval; then run the sprints with Lanewright (https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free scrum-kit (https://github.com/huzairsaputra/scrum-kit).

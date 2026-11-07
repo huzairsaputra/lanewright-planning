@@ -10,14 +10,17 @@ exports, a folder, a Google Drive folder, pasted notes, or just one sentence) an
 - Lists what is missing, then asks at most two short rounds of questions, each with a proposed
   default. Anything still unknown is written down as an `ASSUMPTION`, never as a fact.
 - Tells a new application from a change to an existing system.
-- Writes in your language. Reads Word files with a small bundled Python script (standard library
+- Writes in the language of your sources. Reads Word files with a small bundled Python script (standard library
   only); PDFs and images are read by the agent itself.
 
 Try: "Run Lanewright Intake on the docs/input folder" or "Lanewright Intake: a citizen complaint
 portal for our city".
 
-Part of a free pipeline: **Intake → SRS → Sprint Planner**, then run the sprints with
-[Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or
-the free [scrum-kit](https://github.com/huzairsaputra/scrum-kit).
+Part of four free skills: **raw input → Intake → SRS → Sprint Planner → Backlog Check (human
+approval) → run the sprints** with [Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free
+[scrum-kit](https://github.com/huzairsaputra/scrum-kit).
+
+Install (free, from Agensi): Lanewright Intake, Lanewright SRS, Lanewright Sprint Planner and
+Lanewright Backlog Check.
 
 MIT licensed. Copyright (c) 2026 Huzair Saputra.

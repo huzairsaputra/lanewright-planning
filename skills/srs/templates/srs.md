@@ -1,8 +1,8 @@
 <!--
 SRS outline for a new application (IEEE 29148 style). Translate every heading, label and table
-header, and the Next step line, into the document language. Keep the IDs (F-01, NFR-01,
-BR-01, UC-01, A-01) and the word ASSUMPTION exactly as shown. Delete these comments. Source
-citations come from the intake file.
+header, the Next step line and fixed phrases ("to be confirmed", "not described in the sources",
+"no source") into the document language. Keep the IDs (F-01, NFR-01, BR-01, UC-01, A-01) and the
+word ASSUMPTION exactly as shown. Delete these comments. Source citations come from the intake file.
 -->
 
 # Software Requirements Specification — <project name>
@@ -71,8 +71,10 @@ citations come from the intake file.
 
 - **Requirement:** The system shall <one behaviour>.
 - **Actor:** <actor>
-- **Priority:** Must / Should / Could (the source's; else core flow of the first release = Must,
-  supporting = Should, nice-to-have = Could; assumed detail: keep it and name A-nn)
+- **Priority:** Must / Should / Could (an intake `priority` fact or the source's; matches a stated
+  must-have = Must even with assumed detail (name A-nn); else core flow of the first release = Must,
+  supporting = Should, nice-to-have = Could; exists only because of an unconfirmed assumption = at
+  most Should)
 - **Acceptance criteria:**
   - AC1: Given <state>, when <action>, then <observable result>.
   - AC2: ...
@@ -81,11 +83,13 @@ citations come from the intake file.
 
 ## 4 Non-functional requirements
 
-<!-- One row per category a source or the user mentions; other categories go to 8 Open questions. -->
+<!-- One row per category a source or the user mentions; other categories go to 8 Open questions.
+Our IDs run NFR-01, NFR-02, ... in order. Source ID is the same field as for F-nn: the source's own
+number (e.g. its NFR-05) goes there, so it is mapped, never silently renumbered. -->
 
 | ID | Category | Requirement | Target | Source | Source ID |
 |---|---|---|---|---|---|
-| NFR-01 | <category a source names> | <statement> | <measurable target or "to be confirmed"> | [citation] | <e.g. NFR-05, or —> |
+| NFR-01 | <category a source names> | <statement> | <measurable target or "to be confirmed"> | [citation] | <the source's number, e.g. NFR-05; omit (—) when it has none> |
 
 ## 5 Entities and business rules
 
@@ -132,6 +136,7 @@ citations come from the intake file.
 | Requirement | Source | Source ID |
 |---|---|---|
 | F-01 | [S2 §3.2] | F-01 |
-| NFR-01 | [S1 p.4]; ASSUMPTION A-03 | — |
+| NFR-01 | [S1 p.4] | NFR-05 |
+| NFR-02 | ASSUMPTION A-03 | — |
 
 Next step: Lanewright Sprint Planner turns this into a weekly sprint plan.

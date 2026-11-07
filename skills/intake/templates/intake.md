@@ -1,26 +1,37 @@
 <!--
-Layout of docs/requirements/intake.md. Translate every heading, label, table header and the Next
-step line into the document language (the language of the sources). Keep the kind tags, citation forms, S/Q/A numbering and
-the word ASSUMPTION exactly as shown, so the SRS skill can parse them. Delete these comments.
+Layout of docs/requirements/intake.md. Translate every heading, label, table header, the Next
+step line and the fixed phrases ("no answer — default taken", "not asked", "Round 2 skipped: no
+answers in round 1", "to confirm", "date to confirm", "not described in the sources", "no source")
+into the document language (the language of the sources). Keep the kind tags, citation forms,
+S/Q/A numbering, the word ASSUMPTION and the "Kind:" line exactly as shown, so the SRS skill can
+parse them. The Kind value is always new-application or change-request in English; a label in
+the document language may follow it. Delete these comments.
 -->
 
 # Intake — <project name>
 
+Kind: new-application (<optional label in the document language>)
+
 | Item | Value |
 |---|---|
 | Project | <name as the sources give it, or the user's working title> |
-| Project kind | New application / Change to an existing system — <one-line reason> <citation> |
+| Project kind | <label in the document language> — <one-line reason> <citation> |
 | Document language | <language> |
 | Prepared | <YYYY-MM-DD> |
-| Sources | <count> |
+| Sources | <count, without S0> |
 | Facts | <count> |
 | Gaps | <count> |
 | Assumptions | <count> |
 
 ## Sources
 
+<!-- S0 only when a fact cites [request]; it is not counted in Sources. Citation forms: [S1 p.7],
+[S1 §3.2], [S1 "Heading"] (heading without a number), [S1] (one-line brief or a source without
+sections), [S3 "Caption" image 4], [S4 2026-03-02 14:05], [interview Q3], [request]. -->
+
 | # | Source | Type | Date | Author | Notes |
 |---|---|---|---|---|---|
+| S0 | the user's request | request | <YYYY-MM-DD> | user | <what the user asked or decided> |
 | S1 | <file name, folder path, Drive link title, "pasted text" or "one-line brief"> | PDF | 2026-03-02 | <role or unit> | <pages read, skipped parts, quality> |
 | S2 | ... | DOCX | unknown | unknown | ... |
 
@@ -41,6 +52,10 @@ with neither. -->
 ### Features
 
 - [feature] <capability> [S2 §3.2]
+
+### Priorities
+
+- [priority] <feature that must exist at launch> [interview Q1]
 
 ### Business rules
 
@@ -98,17 +113,25 @@ with neither. -->
 
 ## Interview
 
+<!-- At most 6 questions per round, gaps ranked by impact: actors and must-haves first, then
+deadline and team, then the rest. Q1 is always the must-have question. -->
+
 ### Round 1 — <YYYY-MM-DD>
 
 | # | Question | Proposed default | Answer |
 |---|---|---|---|
-| Q1 | ... | ... | <answer, "default accepted" or "no answer — default taken"> |
+| Q1 | Which 3–5 features must exist at launch? | <the core flows you infer> | <answer, "default accepted" or "no answer — default taken"> |
+| Q2 | ... | ... | ... |
 
 ### Round 2 — <YYYY-MM-DD>
 
 | # | Question | Proposed default | Answer |
 |---|---|---|---|
-| Q5 | ... | ... | ... |
+| Q7 | ... | ... | ... |
+
+<!-- Round 1 got no answers: write only this line instead of the Round 2 heading and table: -->
+
+Round 2 skipped: no answers in round 1
 
 ## Assumptions
 

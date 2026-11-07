@@ -1,7 +1,8 @@
 <!--
 SRS outline for a change to an existing system. Translate every heading, label and table header
-and the Next step line into the document language. Keep the IDs (CR-01, NFR-01, BR-01, A-01) and the word ASSUMPTION
-exactly as shown. Delete these comments. Source citations come from the intake file.
+the Next step line and fixed phrases ("to be confirmed", "not described in the sources", "no
+source") into the document language. Keep the IDs (CR-01, NFR-01, BR-01, A-01) and the word
+ASSUMPTION exactly as shown. Delete these comments. Source citations come from the intake file.
 -->
 
 # Change Request Specification — <system name>
@@ -68,27 +69,31 @@ document's own and never reuse the existing system's IDs. -->
 
 #### CR-01 <short name>
 
-- **Current behaviour:** <what happens today> [S3 image 2]
+- **Current behaviour:** <what happens today> [S3 image 2] — or "not described in the sources"
+  plus an open question in section 8; never guessed
 - **Requested change:** The system shall <new behaviour>.
 - **Impact:**
   - Screens: <screens changed or added>
   - Data: <fields, tables, migrations, existing records to convert>
   - API: <endpoints changed, added, deprecated; consumers affected>
-- **Priority:** Must / Should / Could (the source's; else core flow = Must, supporting = Should,
-  nice-to-have = Could; assumed detail: keep it and name A-nn)
+- **Priority:** Must / Should / Could (an intake `priority` fact or the source's; matches a stated
+  must-have = Must even with assumed detail (name A-nn); else core flow = Must, supporting = Should,
+  nice-to-have = Could; exists only because of an unconfirmed assumption = at most Should)
 - **Acceptance criteria (two to five):**
   - AC1: Given <state>, when <action>, then <observable result>.
-  - AC2: Existing <behaviour that must not change> still works.
+  - AC2: Existing <behaviour that must not change> still gives <the same observable result>.
 - **Source:** [S1 p.2] / ASSUMPTION A-02
 - **Source ID:** <the request's own item number, e.g. item 3; omit when it has none>
 
 ## 4 Non-functional impact
 
-<!-- One row per category a source or the user mentions; other categories go to 8 Open questions. -->
+<!-- One row per category a source or the user mentions; other categories go to 8 Open questions.
+Our IDs run NFR-01, NFR-02, ... in order. Source ID is the same field as for CR-nn: the source's
+own number (e.g. its NFR-05) goes there, so it is mapped, never silently renumbered. -->
 
 | ID | Category | Requirement | Target | Source | Source ID |
 |---|---|---|---|---|---|
-| NFR-01 | <category a source names> | <statement> | <target or "to be confirmed"> | [citation] | <or —> |
+| NFR-01 | <category a source names> | <statement> | <target or "to be confirmed"> | [citation] | <the source's number, e.g. NFR-05; omit (—) when it has none> |
 
 ## 5 Entities and business rules
 
@@ -127,7 +132,8 @@ document's own and never reuse the existing system's IDs. -->
 |---|---|---|---|---|
 | OQ-01 | Confirm ASSUMPTION A-01: <statement> | A-01 | CR-02, CR-04 | <role> |
 | OQ-02 | <question> | Gap G2 | CR-03 | <role> |
-| OQ-03 | Is <category> needed (no source mentions it)? | Not in any source | — | <role> |
+| OQ-03 | What does the system do today for <CR-05 area>? (not described in the sources) | No source | CR-05 | <role> |
+| OQ-04 | Is <category> needed (no source mentions it)? | Not in any source | — | <role> |
 
 ## Traceability
 

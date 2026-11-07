@@ -25,9 +25,10 @@ You write `docs/requirements/srs.md` and `docs/requirements/srs.docx` from the e
   when ... then ..."). Never "works well", "user-friendly", "fast".
 - **Document language = the language of the source material**: the intake's language (it already
   follows its sources); without an intake, the language of most source text, or of the line for a
-  one-line input. The user may override it. Translate every heading, table header and fixed line
-  (including "Next step"); keep the IDs (`F-01`, `NFR-01`, `BR-01`, `UC-01`, `CR-01`) and the word
-  ASSUMPTION as they are.
+  one-line input. The user may override it. Translate every heading, table header and fixed line,
+  including "Next step" and the fixed phrases "no answer — default taken", "not asked", "to
+  confirm", "to be confirmed", "date to confirm", "not described in the sources" and "no source";
+  keep the IDs (`F-01`, `NFR-01`, `BR-01`, `UC-01`, `CR-01`) and the word ASSUMPTION as they are.
 - **Data hygiene.** Keep API paths, ports and field names. Drop hosts, IP addresses, credentials,
   tokens and personal values. Record people by role when the source gives one, otherwise by the
   handle the source uses.
@@ -42,21 +43,24 @@ You write `docs/requirements/srs.md` and `docs/requirements/srs.docx` from the e
 
 ## Step 1: Load the evidence
 
-Read `docs/requirements/intake.md` in full: project kind, language, facts, gaps, interview,
-assumptions.
+Read `docs/requirements/intake.md` in full: the `Kind:` line, language, facts (including
+`priority` facts), gaps, interview, assumptions.
 
 No intake file: offer two options and wait for the choice (default: 2).
 
 1. Run Lanewright Intake first (recommended for documents or folders).
 2. Do a short intake inline: read the input the user gives, list sources `S1..`, cited facts by
-   kind, gaps and at most one interview round of three to six questions with proposed defaults,
-   then save it as `docs/requirements/intake.md` in the intake layout (sources table, facts grouped
+   kind, gaps and at most one interview round of up to six questions with proposed defaults (the
+   first: "Which 3–5 features must exist at launch?"), then save it as
+   `docs/requirements/intake.md` in the intake layout (`Kind:` line, sources table, facts grouped
    by kind, gaps, interview, assumptions) before writing the SRS.
 
 ## Step 2: Pick the outline
 
-- Project kind **new application** → `templates/srs.md`.
-- Project kind **change to an existing system** → `templates/change-request.md`.
+The intake's `Kind:` value is an English keyword in every document language; read it as is.
+
+- `Kind: new-application` → `templates/srs.md`.
+- `Kind: change-request` → `templates/change-request.md`.
 - Kind missing or mixed: ask the user; default to the dominant kind in the facts.
 
 Read the chosen template in full before drafting.
@@ -82,13 +86,18 @@ Requirements (`F-nn`, or `CR-nn` in a change request):
 - One behaviour per requirement: "The system shall ..." (in the document language), two to five
   acceptance criteria `AC1`, `AC2`, ... A `CR` also gives current behaviour and impact (screens,
   data, API).
-- **Priority:** the source's priority when it gives one; otherwise Must for core flows of the first
-  release, Should for supporting features, Could for nice-to-haves. A sourced requirement with an
-  assumed detail keeps its priority and names the assumption (`A-03`); only a requirement that
-  exists only because of an assumption is at most Should.
+- **Current behaviour (CR):** cite it from the sources. When they do not describe it, write "not
+  described in the sources" and add an open question; never guess it.
+- **Priority:** from the intake's `priority` facts (the must-have answer) or the source's own
+  priority. A requirement that matches a stated must-have is Must, even when the rest of its detail
+  is assumed (name the assumption, `A-03`). Otherwise Must for core flows of the first release,
+  Should for supporting features, Could for nice-to-haves. Only a requirement that exists solely
+  because of an unconfirmed assumption is at most Should.
 - **Source ID:** when the source numbers its requirements (`F-01`, `NFR-05`, `UC-01`), fill the
-  Source ID field or column so the mapping is explicit. Change requests are `CR-nn` and never reuse
-  the existing system's IDs.
+  Source ID field or column, for functional and non-functional requirements alike, so the mapping
+  is explicit. Our own IDs stay sequential (`F-01`.., `NFR-01`.. in order); a source's `NFR-05`
+  goes in Source ID, never silently renumbered or reused. Change requests are `CR-nn` and never
+  reuse the existing system's IDs.
 - Screens from the intake become requirements for the behaviour they show, cited to the image.
 
 Non-functional requirements: include a category (security, privacy, performance, availability,
@@ -104,6 +113,7 @@ per open gap or conflict.
 - Every requirement (`F`, `NFR`, `BR`, `CR`) has a source citation or `ASSUMPTION A-nn`.
 - Every requirement appears once in the traceability table.
 - Every intake gap is either answered by a citation or listed in Open questions.
+- Every intake `priority` fact (must-have) is covered by a Must requirement.
 - Every intake source appears in 1 Introduction → References.
 - No acceptance criterion uses an untestable word (fast, easy, good, user-friendly, robust).
 - IDs are sequential and unique.

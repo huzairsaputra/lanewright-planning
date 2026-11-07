@@ -29,6 +29,7 @@ SKILLS = {
     "intake": ["docx_text.py"],
     "srs": ["md_to_docx.py"],
     "sprint-planner": ["md_to_docx.py"],
+    "backlog-check": ["backlog_check.py"],
 }
 REQUIRED = ("SKILL.md", "README.md", "LICENSE")
 MAX_SCRIPT = 20 * 1024
