@@ -56,10 +56,19 @@ py -I build.py --uninstall          # removes only what --install wrote
 
 Use `python3` or `python` instead of `py` outside Windows.
 
+## Example
+
+[`examples/superapps/`](examples/superapps/) is a complete run from a single line, "Portal layanan
+publik digital terpadu (Superapps)": the intake, the SRS (Markdown and Word), an eight-week sprint
+plan (Markdown and Word) and eight sprint backlogs, in Indonesian because the brief is. Everything
+the brief did not say is labelled as an assumption. The backlog check on those files reports
+`READY WITH WARNINGS`: no errors, eight short acceptance criteria.
+
 ## Repository layout
 
 | Path | What it holds |
 |---|---|
+| `examples/superapps/` | The example run above, with its `.claude/kit.json` |
 | `skills/<skill>/` | `SKILL.md`, `templates/`, `README.md`, `LICENSE` of one skill |
 | `shared/scripts/` | `docx_text.py` (DOCX → text, used by Intake), `md_to_docx.py` (Markdown → DOCX, used by SRS and Sprint Planner) and `backlog_check.py` (backlog readiness rules, used by Backlog Check); standard library only, each has `--self-test` |
 | `build.py` | Checks each skill and builds `dist/<name>-<version>.zip`, copying in the scripts it uses |

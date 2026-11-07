@@ -1,0 +1,12 @@
+{"project": "superapps", "stack": "laravel",
+ "branch": {"base": "staging", "release": "main", "integration": "integration-{n}", "region": "sprint-{nn}/{region}/{id}"},
+ "modules": ["portal", "api"],
+ "regions": {
+  "module": {"role": "module-dev", "write": ["{module}/**"], "except": ["{module}/tests/**"], "per_module": true},
+  "shared": {"role": "shared-module-owner", "write": ["database/**"]},
+  "tests": {"role": "qa-test-engineer", "write": ["*/tests/**"]},
+  "tooling": {"role": "platform-tooling", "write": [".claude/**", ".github/**"]}},
+ "gates": {"ci": "php artisan test"},
+ "docs": {"backlog": "docs/sprints/sprint-{nn}-backlog.md", "reports": "docs/sprints/reports/sprint-{nn}/", "handover": "docs/sprints/handover.md", "code_debt": "docs/sprints/code-debt.md"},
+ "external_spec": {"drive_folder_id": null, "required": false},
+ "forge": {"type": "github", "project": "example/superapps"}}
