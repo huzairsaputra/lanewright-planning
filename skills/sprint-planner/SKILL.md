@@ -2,7 +2,7 @@
 name: lanewright-sprint-planner
 description: Turns an SRS (docs/requirements/srs.md) into a weekly Scrum sprint plan, docs/sprints/weekly-sprint-plan.md plus a Word copy, and one backlog file per sprint in the exact format Lanewright or scrum-kit reads, after a short interview on dates, team, capacity, holidays and milestones. Items are sized 2 to 10 story points, foundations come first, every item has an owner role and testable acceptance criteria from the SRS, and no sprint exceeds its capacity. Use when the user asks for a sprint plan, a release or project schedule, a sprint backlog, story-point estimates or a timeline from requirements.
 summary: SRS in, capacity-checked Monday-to-Sunday sprint plan (Markdown and DOCX) and per-sprint backlog files out, ready to run with Lanewright or scrum-kit.
-version: 1.0.1
+version: 1.0.2
 tags: [scrum, sprint-planning, backlog, story-points, project-planning, agile]
 keywords: [weekly sprint plan, sprint backlog, capacity planning, definition of done, sprint goal, story point estimation, kit.json, scrum-kit]
 use_cases:
@@ -65,6 +65,12 @@ this into the plan as an open decision for the product owner with three options:
 implementation item merges. Until the product owner decides, plan option (c): each QA item sits in
 the same sprint as the item it tests, is scheduled after it, and its text says `Tests: <item ID>`
 (the label `Tests:` stays as it is in every language, like the IDs).
+
+Read the Definition of Done in those rules too, if any. List each DoD item that evidently does not
+apply to this SRS in plan section 4.3, with the reason and the SRS reference (for example "negative
+authorization test: SRS A-03 says the notes have no login"); write "None" when there is none or the
+project has no rules. These are proposals for the product owner, who approves them in the Backlog
+Check sign-off: never mark one approved and never drop it from the Definition of Done yourself.
 
 ## Step 2: Detect the workflow tool
 
@@ -166,8 +172,9 @@ items (only placeholder or commented-out rows, see Rules): overwrite it, no `.pr
 ## Step 9: Report
 
 Tell the user, in their language: sprints and dates, total SP against total capacity, items per
-sprint, what did not fit, planner assumptions taken, open decisions, files written. End the plan
-and your reply with this line, translated into the language of each:
+sprint, what did not fit, planner assumptions taken, open decisions, DoD items proposed as not
+applicable, files written. End the plan and your reply with this line, translated into the
+language of each:
 
 "Next step: Lanewright Backlog Check verifies each sprint backlog and records your approval; then
 run the sprints with Lanewright (https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams)

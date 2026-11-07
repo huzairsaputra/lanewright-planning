@@ -15,6 +15,9 @@ each into a page break before a sprint.
 | Role / People / Repository / Capacity per sprint / Notes | Peran / Personel / Repositori / Kapasitas per Sprint / Catatan |
 | 4 Definition of Ready and Definition of Done | 4 Definition of Ready dan Definition of Done |
 | Work type / Done criteria | Jenis Pekerjaan / Kriteria Selesai |
+| 4.3 Definition of Done: items that may not apply | 4.3 Butir Definition of Done yang mungkin tidak berlaku |
+| DoD item / Why it may not apply / SRS reference | Butir DoD / Alasan mungkin tidak berlaku / Rujukan SRS |
+| None. | Tidak ada. |
 | 5 Sprint map | 5 Peta Sprint |
 | Sprint / Period / Days / Sprint Goal | Sprint / Periode / Hari / Sprint Goal |
 | 6 Sprint details | 6 Rencana Detail per Sprint |
@@ -155,6 +158,17 @@ Open decisions for the product owner:
 | DevOps / CI | Pipeline green; deployment documented; secrets kept out of the repository |
 | QA | Test cases written and run; defects logged; regression run on the increment |
 | Documentation | Updated in the repository and reviewed |
+
+### 4.3 Definition of Done: items that may not apply
+
+<!-- Proposals only, never approved here: each item of the Definition of Done in the project's
+rules (CLAUDE.md or similar) that evidently does not apply to this SRS, with the reason and the SRS
+reference. None, or no project rules: write "None." instead of the table. The product owner
+approves them in the Lanewright Backlog Check sign-off. -->
+
+| DoD item | Why it may not apply | SRS reference |
+|---|---|---|
+| Negative authorization test | The notes have no login | A-03 |
 
 ## 5 Sprint map
 
