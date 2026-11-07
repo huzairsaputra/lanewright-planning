@@ -33,6 +33,7 @@ each into a page break before a sprint.
 | Metric / Definition / Target | Metrik / Definisi / Target |
 | Appendix A. Scrum event templates | Lampiran A. Templat Acara Scrum |
 | Field / Content | Ruas / Isi |
+| foundation (only for items of a shared-module or tooling role) / first / dependency of <ID> | fondasi (hanya untuk item peran modul bersama atau tooling) / pertama / prasyarat untuk <ID> |
 | Planner assumptions / to confirm / date to confirm | Asumsi perencanaan / perlu dikonfirmasi / tanggal perlu dikonfirmasi |
 | Open decisions for the product owner | Keputusan terbuka untuk product owner |
 | Sprint report recipient | Penerima laporan sprint |
@@ -143,7 +144,7 @@ Open decisions for the product owner:
 
 ### 4.1 Definition of Ready
 
-- The item traces to an SRS requirement or is a named foundation item.
+- The item traces to an SRS requirement or is a named setup item.
 - Acceptance criteria are testable and agreed with the product owner.
 - Estimated at 10 SP or less; dependencies are done or planned earlier.
 - The owner role is assigned and has capacity in the sprint.
@@ -196,7 +197,10 @@ Sprint Goal: <one demonstrable outcome>.
 | OPS-S01-01 | <item> | OPS | 3 | <criteria; source requirement> |
 | BE-1-S01-01 | ... | BE-1 | 5 | ... |
 
-<!-- The Owner column holds the team code. -->
+<!-- The Owner column holds the team code. "Foundation" (Indonesian "fondasi") labels only items
+owned by a shared-module or tooling role (OPS, or the kit.json role for shared code or tooling);
+an ordinary module developer's item is "first" or "dependency of <ID>", even when others depend on
+it. -->
 
 Total commitment: <N> SP — <P> people, capacity <C> SP.
 

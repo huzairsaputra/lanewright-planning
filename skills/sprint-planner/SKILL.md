@@ -1,6 +1,6 @@
 ---
 name: lanewright-sprint-planner
-description: Turns an SRS (docs/requirements/srs.md) into a weekly Scrum sprint plan, docs/sprints/weekly-sprint-plan.md plus a Word copy, and one backlog file per sprint in the exact format Lanewright or scrum-kit reads, after a short interview on dates, team, capacity, holidays and milestones. Items are sized 2 to 10 story points, foundations come first, every item has an owner role and testable acceptance criteria from the SRS, and no sprint exceeds its capacity. Use when the user asks for a sprint plan, a release or project schedule, a sprint backlog, story-point estimates or a timeline from requirements.
+description: Turns an SRS (docs/requirements/srs.md) into a weekly Scrum sprint plan, docs/sprints/weekly-sprint-plan.md plus a Word copy, and one backlog file per sprint in the exact format Lanewright or scrum-kit reads, after a short interview on dates, team, capacity, holidays and milestones. Items are sized 2 to 10 story points, setup work comes first, every item has an owner role and testable acceptance criteria from the SRS, and no sprint exceeds its capacity. Use when the user asks for a sprint plan, a release or project schedule, a sprint backlog, story-point estimates or a timeline from requirements.
 summary: SRS in, capacity-checked Monday-to-Sunday sprint plan (Markdown and DOCX) and per-sprint backlog files out, ready to run with Lanewright or scrum-kit.
 version: 1.0.2
 tags: [scrum, sprint-planning, backlog, story-points, project-planning, agile]
@@ -20,7 +20,14 @@ before writing; they are the exact layouts.
 ## Rules
 
 - **Nothing invented.** Backlog items come from SRS requirements (`F`, `NFR`, `BR`, `CR`, `UC`) or
-  from the foundations every project needs. Items resting on an SRS assumption keep the label.
+  from the setup work every project needs (Step 5). Items resting on an SRS assumption keep the
+  label.
+- **"Foundation" is reserved.** The word foundation (Indonesian "fondasi") may label only items
+  owned by a shared-module or tooling role, the roles whose work must merge before the others
+  start: in kit.json the role of the region for shared code and schema or for CI and tooling (e.g.
+  `shared-module-owner`, `platform-tooling`); without kit.json `OPS` and any team code the user
+  names as shared-module owner. An item owned by an ordinary module developer is never called
+  foundation, even when other items depend on it: write "first" or "dependency of <ID>" instead.
 - **Capacity is a ceiling.** A sprint's total SP never exceeds its capacity, and no role is booked
   beyond its own capacity. Overflow moves to a later sprint, never into a bigger one. If the work does
   not fit before the end date, say so and show what falls outside; never squeeze it in.
@@ -122,14 +129,15 @@ confirm".
 
 ## Step 5: Build the backlog
 
-1. **Foundations first**, as items of their own: repository and branching, CI with lint and tests,
+1. **Setup first**, as items of their own: repository and branching, CI with lint and tests,
    environments and secrets handling, database schema and migrations, authentication and roles, API
-   contract or shared conventions. Include only those the project needs.
+   contract or shared conventions. Include only those the project needs. Label one "foundation"
+   only when its owner is a shared-module or tooling role (Rules).
 2. **Split every requirement** into items small enough for one week: 2, 3, 5, 8 or at most 10 SP.
    Larger: split by layer (schema, API, screen), by flow step or by rule.
 3. Each item: title, owner team code, SP, acceptance criteria copied or derived from the SRS (cite
    the requirement ID, e.g. "F-03 AC1–AC2"), dependencies.
-4. Order: foundations, then Must, Should, Could, always respecting dependencies; integrations and
+4. Order: setup, then Must, Should, Could, always respecting dependencies; integrations and
    risky items early; hardening, UAT fixes and the handover document last.
 
 ## Step 6: Fill the sprints
