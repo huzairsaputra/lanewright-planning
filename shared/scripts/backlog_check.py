@@ -158,15 +158,19 @@ def load_kit(path):
         raise UsageError("%s has neither regions nor wilayah" % path)
     if isinstance(raw, list):
         raw = {str(r.get("name") or r.get("key") or r.get("nama")): r for r in raw if isinstance(r, dict)}
+    def names(mods):
+        if isinstance(mods, dict):
+            mods = list(mods)
+        return [m if isinstance(m, str) else str(m.get("name") or m.get("nama")) for m in (mods or [])
+                if isinstance(m, (str, dict))]
+
+    # kit.json lists the modules once at the top level; a region with per_module applies to each of them.
+    top = names(kit.get(keys[2]))
     regions = {}
     for name, r in raw.items():
         r = r if isinstance(r, dict) else {}
-        mods = r.get(keys[2]) or []
-        if isinstance(mods, dict):
-            mods = list(mods)
-        mods = [m if isinstance(m, str) else str(m.get("name") or m.get("nama")) for m in mods
-                if isinstance(m, (str, dict))]
-        regions[name] = {"role": r.get(keys[0]), "per_module": bool(r.get(keys[1])), "modules": mods}
+        regions[name] = {"role": r.get(keys[0]), "per_module": bool(r.get(keys[1])),
+                         "modules": names(r.get(keys[2])) or top}
     return {"format": fmt, "regions": regions}
 
 

@@ -56,9 +56,11 @@ Periode: 10 – 16 Agustus 2026
 
 KIT = {"docs": {"backlog": "docs/sprints/sprint-{nn}-backlog.md"},
        "regions": {"ops": {"role": "ops-dev"}, "api": {"role": "module-dev"}, "web": {"role": "web-dev"}}}
-KIT_SCRUM = {"dokumen": {"backlog": "docs/sprints/sprint-{nn}-backlog.md"},
-             "wilayah": {"modules": {"agen": "module-dev", "per_modul": True, "modul": ["pengaduan"]},
-                         "web": {"agen": "web-dev"}}}
+# Real shape: the modules are listed once at the top level; a per_modul region applies to each of them.
+KIT_SCRUM = {"dokumen": {"backlog": "docs/sprints/sprint-{nn}-backlog.md"}, "modul": ["pengaduan"],
+             "wilayah": {"modul": {"agen": "module-dev", "per_modul": True}, "web": {"agen": "web-dev"}}}
+KIT_PER_MODULE = {"docs": {"backlog": "docs/sprints/sprint-{nn}-backlog.md"}, "modules": ["api", "portal"],
+                  "regions": {"module": {"role": "module-dev", "per_module": True}, "tests": {"role": "qa-test-engineer"}}}
 
 SRS = """# SRS
 
@@ -160,6 +162,24 @@ class BacklogCheckTest(unittest.TestCase):
         out = self.assert_error(LANEWRIGHT.replace("| ops | ops-dev |", "| infra | ops-dev |"), "region",
                                 "sprint-01-backlog.md", "--kit", self.write("kit.json", KIT))
         self.assertIn("'infra' is not a region", out)
+
+    def test_module_names_are_valid_regions_when_per_module(self):
+        # Regression: a module listed at the top level of kit.json is a valid value for a per_module region.
+        text = ("# Sprint 01 backlog\n\nSprint goal: A resident can register and sign in.\n\n"
+                "Period: 3 – 9 August 2026\n\n"
+                "| ID | Item | Region / module | Owner | SP | Acceptance criteria |\n|---|---|---|---|---|---|\n"
+                "| BE-1-S01-01 | Registration API (F-01) | api | module-dev | 5 | F-01 AC1: POST `/api/register` returns 201 for a new e-mail |\n"
+                "| FE-1-S01-01 | Sign-in screen (F-02) | portal | module-dev | 3 | F-02 AC1: valid credentials open the dashboard within 2 s |\n"
+                "| QA-S01-01 | Registration tests (F-01) | tests | qa-test-engineer | 2 | F-01 AC1: the 201 and 409 cases are covered by passing tests |\n\n"
+                "## Out of scope this sprint\n\n- none\n\n## Dependencies and risks\n\n- none\n")
+        kit = self.write("kit.json", KIT_PER_MODULE)
+        code, out = self.run_cli(self.write("sprint-01-backlog.md", text), "--kit", kit)
+        self.assertEqual(code, 0, out)
+        self.assertNotIn("| region |", out)
+        code, out = self.run_cli(self.write("sprint-01-backlog.md", text.replace("| portal |", "| billing |")),
+                                 "--kit", kit)
+        self.assertEqual(code, 1)
+        self.assertIn("'billing' is not a region or module", out)
 
     # warnings keep exit 0
     def test_warnings_exit_zero(self):
