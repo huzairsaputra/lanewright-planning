@@ -36,7 +36,7 @@ MAX_SCRIPT = 20 * 1024
 MAX_FILES = 200
 MAX_CHARS = 6_000_000
 # The author's organisation and real project names (whole words) must never ship.
-FORBIDDEN = re.compile(r"\b(pemko|banda|aceh|diskominfo\w*|saleum|simagang|jdih|sppd|pppk)\b", re.IGNORECASE)
+FORBIDDEN = re.compile(r"\b(pemko|banda|aceh|diskominfo\w*|saleum|simagang|jdih|sppd|pppk)\b", re.IGNORECASE)  # public-scan: allow
 
 
 def collect(directory):

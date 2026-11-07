@@ -39,7 +39,7 @@ class TestCheck(unittest.TestCase):
         self.assertEqual((fm["name"], fm["version"]), ("kit", "1.0.0"))
 
     def test_forbidden_word_fails(self):
-        for word in ("Pemko", "diskominfotik", "SPPD", "Banda Aceh"):
+        for word in ("Pemko", "diskominfotik", "SPPD", "Banda Aceh"):  # public-scan: allow
             _, _, errors = build.check(replace("templates/plan.md", ("Made for %s.\n" % word).encode()))
             self.assertTrue(any("forbidden word" in e for e in errors), word)
 
