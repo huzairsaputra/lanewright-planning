@@ -1,4 +1,19 @@
-# Lanewright Planning
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/logo-dark.svg">
+    <img alt="Lanewright Planning" src="brand/logo.svg" width="440">
+  </picture>
+</p>
+
+<h1 align="center">Lanewright Planning</h1>
+
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+  <a href="https://github.com/huzairsaputra/lanewright-planning/releases"><img alt="Release" src="https://img.shields.io/github/v/release/huzairsaputra/lanewright-planning?color=green"></a>
+  <a href="https://github.com/huzairsaputra/lanewright-planning/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/huzairsaputra/lanewright-planning/actions/workflows/ci.yml/badge.svg"></a>
+  <img alt="Python 3.8+" src="https://img.shields.io/badge/python-3.8%2B-blue.svg">
+  <img alt="Windows, macOS, Linux" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg">
+</p>
 
 Four free agent skills that take a project from loose material to an approved sprint backlog your
 agents can run. Each works on its own; together they form a pipeline:
@@ -73,6 +88,7 @@ three requirements.
 | `examples/superapps/` | The example run above, with its `.claude/kit.json` |
 | `skills/<skill>/` | `SKILL.md`, `templates/`, `README.md`, `LICENSE` of one skill |
 | `shared/scripts/` | `docx_text.py` (DOCX → text, used by Intake), `md_to_docx.py` (Markdown → DOCX, used by SRS and Sprint Planner) and `backlog_check.py` (backlog readiness rules, used by Backlog Check); standard library only, each has `--self-test` |
+| `brand/` | The Lanewright Planning logo: mark, horizontal logo (light and dark), and the 512 px icon (`icon-tile-green.svg`, `icon-512.png`) |
 | `build.py` | Checks each skill and builds `dist/<name>-<version>.zip`, copying in the scripts it uses |
 | `tests/` | Unit tests for the scripts and the build |
 
