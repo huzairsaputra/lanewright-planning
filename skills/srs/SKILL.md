@@ -19,15 +19,23 @@ You write `docs/requirements/srs.md` and `docs/requirements/srs.docx` from the e
 ## Rules
 
 - **Never invent a requirement.** Each requirement cites intake citations (`[S2 p.7]`,
-  `[interview Q3]`) or `ASSUMPTION A-nn`. A requirement resting on an assumption keeps that label
-  and appears in Open questions; never upgrade it to a plain requirement silently.
+  `[interview Q3]`, `[request]`) or `ASSUMPTION A-nn`. A requirement that exists only because of an
+  assumption keeps that label; never upgrade it to a plain requirement silently.
 - **Testable acceptance criteria.** Observable, with numbers or concrete examples ("given ...
   when ... then ..."). Never "works well", "user-friendly", "fast".
-- **The document language** is the language of the intake file (or of the user's request when
-  there is no intake). Translate the template headings; keep IDs (`F-01`, `NFR-01`, `BR-01`,
-  `UC-01`, `CR-01`) and the word ASSUMPTION as they are.
-- **Personal and government data stay out.** Field names and data kinds only, never values. No
-  names of private individuals unless the user asks.
+- **Document language = the language of the source material**: the intake's language (it already
+  follows its sources); without an intake, the language of most source text, or of the line for a
+  one-line input. The user may override it. Translate every heading, table header and fixed line
+  (including "Next step"); keep the IDs (`F-01`, `NFR-01`, `BR-01`, `UC-01`, `CR-01`) and the word
+  ASSUMPTION as they are.
+- **Data hygiene.** Keep API paths, ports and field names. Drop hosts, IP addresses, credentials,
+  tokens and personal values. Record people by role when the source gives one, otherwise by the
+  handle the source uses.
+- **Files.** Write only in `docs/requirements/` unless the user asks. Temporary script copies go to
+  the system temp directory and are deleted after the run, even when the user said not to change
+  files outside the repository.
+- **No answers.** If a question gets no answer (no reply, or a non-interactive run), take the
+  proposed default, record it as `ASSUMPTION A-nn` with "no answer — default taken", and go on.
 - **Ask before overwriting** `srs.md` or `srs.docx`: update, replace, or write
   `srs.proposed.md` / `srs.proposed.docx` beside them.
 - Do not commit, push or upload anything unless the user asks.
@@ -37,7 +45,7 @@ You write `docs/requirements/srs.md` and `docs/requirements/srs.docx` from the e
 Read `docs/requirements/intake.md` in full: project kind, language, facts, gaps, interview,
 assumptions.
 
-No intake file: offer two options and wait for the choice.
+No intake file: offer two options and wait for the choice (default: 2).
 
 1. Run Lanewright Intake first (recommended for documents or folders).
 2. Do a short intake inline: read the input the user gives, list sources `S1..`, cited facts by
@@ -55,36 +63,41 @@ Read the chosen template in full before drafting.
 
 ## Step 3: Draft
 
-Work through the facts kind by kind:
+Put the intake facts in these sections:
 
-| Intake facts | SRS section |
-|---|---|
-| goal, stakeholder | 1 Introduction (purpose, scope) |
-| actor | 2 Actors / user classes table |
-| constraint | 2 Constraints |
-| assumptions A-nn | 2 Assumptions (copied with their numbers) |
-| feature, screen | 3 Functional requirements, 6 Use cases |
-| nfr | 4 Non-functional requirements |
-| data, rule | 5 Data and business rules |
-| integration | 7 External interfaces |
-| gaps still open, conflicts | 8 Open questions |
+| Intake facts | New application (`srs.md`) | Change request (`change-request.md`) |
+|---|---|---|
+| goal, stakeholder | 1 Introduction | 1 Introduction |
+| actor | 2.2 Actors and user classes | 2.2 Actors affected |
+| constraint | 2.3 Constraints | 2.3 Constraints |
+| assumptions A-nn | 2.4 Assumptions (same numbers) | 2.4 Assumptions (same numbers) |
+| feature, screen | 3 Functional requirements, 6 Use cases | 2.1 Context (today), 3 Requested changes, 6 Use cases changed |
+| nfr | 4 Non-functional requirements | 4 Non-functional impact |
+| data, rule | 5 Entities and business rules | 5 Entities and business rules |
+| integration | 7 External interfaces | 7 External interfaces |
+| open gaps, conflicts, unmentioned NFR categories | 8 Open questions | 8 Open questions |
 
-Functional requirements:
+Requirements (`F-nn`, or `CR-nn` in a change request):
 
-- One behaviour per requirement: "The system shall ..." (in the document language).
-- Priority: **Must** when a source says it is required, core, mandated by law or needed for the
-  first release; **Should** when a source asks for it without making it essential; **Could** when it
-  is a nice-to-have or comes from an assumption only. A requirement that rests on an assumption is
-  never Must unless the user confirms it.
-- Two to five acceptance criteria each, numbered `AC1`, `AC2`.
+- One behaviour per requirement: "The system shall ..." (in the document language), two to five
+  acceptance criteria `AC1`, `AC2`, ... A `CR` also gives current behaviour and impact (screens,
+  data, API).
+- **Priority:** the source's priority when it gives one; otherwise Must for core flows of the first
+  release, Should for supporting features, Could for nice-to-haves. A sourced requirement with an
+  assumed detail keeps its priority and names the assumption (`A-03`); only a requirement that
+  exists only because of an assumption is at most Should.
+- **Source ID:** when the source numbers its requirements (`F-01`, `NFR-05`, `UC-01`), fill the
+  Source ID field or column so the mapping is explicit. Change requests are `CR-nn` and never reuse
+  the existing system's IDs.
 - Screens from the intake become requirements for the behaviour they show, cited to the image.
 
-Non-functional requirements: cover security, privacy, performance, availability, accessibility and
-maintainability. Use the measurable target a source gives. When no source gives one, write the
-requirement with "Target: to be confirmed" and add it to Open questions; do not make a number up.
+Non-functional requirements: include a category (security, privacy, performance, availability,
+accessibility, maintainability, ...) only when a source or the user mentions it; any other category
+goes to Open questions, not into the requirements. Use the measurable target the source gives; when
+it gives none, write "Target: to be confirmed" and add it to Open questions; never make a number up.
 
-Change-request SRS: one `CR-nn` per requested change, each with current behaviour, requested change,
-impact (screens, data, API), acceptance criteria, priority and source.
+Open questions: one row per assumption, listing every requirement that rests on it, then one row
+per open gap or conflict.
 
 ## Step 4: Check before saving
 
@@ -100,16 +113,17 @@ impact (screens, data, API), acceptance criteria, priority and source.
 1. Write `docs/requirements/srs.md`.
 2. Convert it with `scripts/md_to_docx.py`: pick `<python>` once, the first of `python3`,
    `python`, `py -3` whose `--version` prints Python 3.8 or newer (`python3` can be a store stub on
-   Windows, and `py` can fail inside an agent sandbox). Write `scripts/md_to_docx.py` from this
-   skill, unchanged, to a temporary file outside the repository; run
-   `<python> <temp>/md_to_docx.py docs/requirements/srs.md docs/requirements/srs.docx`; delete the
-   temporary file. The script reads no other file of this skill. No working Python: skip the
-   `.docx` and tell the user why.
+   Windows, and `py` can fail inside an agent sandbox). Make a directory with
+   `<python> -c "import tempfile; print(tempfile.mkdtemp())"`, write `scripts/md_to_docx.py` there
+   unchanged, run `<python> <dir>/md_to_docx.py docs/requirements/srs.md docs/requirements/srs.docx`,
+   and delete the directory. The script reads no other file of this skill. No working Python: skip
+   the `.docx` and tell the user why.
 
 ## Step 6: Report
 
-Tell the user, in their language: number of functional, non-functional and data requirements (or
-change requests) by priority, use cases, open questions, and which requirements rest on
-assumptions. Ask them to confirm or reject those assumptions. End your reply and the file with:
+Tell the user, in their language: number of functional and non-functional requirements (or change
+requests) by priority, entities and business rules (BR-nn), use cases, open questions, and each
+assumption with the requirements that rest on it. Ask them to confirm or reject those assumptions.
+End the file and your reply with this line, translated into the language of each:
 
 "Next step: Lanewright Sprint Planner turns this into a weekly sprint plan."

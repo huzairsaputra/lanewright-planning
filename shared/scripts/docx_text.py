@@ -4,9 +4,10 @@ Usage:
   docx_text.py <file.docx>     print the document
   docx_text.py --self-test     build a small .docx in memory and check the output
 
-Output: core properties (title, author, created) when present, then the body: headings as
-# .. ###### (Title and Heading1..6 styles), list paragraphs as "- ", tables as Markdown tables
-(cell paragraphs joined with " / ", merged cells padded), and a line
+Output: core properties (title, author, created) when present and not a known generator default,
+then the body: headings as # .. ###### (Title and Heading1..6 styles), a short all-bold paragraph
+followed by normal text as "## ", list paragraphs (Word numbering or List* styles) as "- ",
+tables as Markdown tables (cell paragraphs joined with " / ", merged cells padded), and a line
 "[image N: <description, title or nearby caption>]" for every embedded image.
 
 Python 3.8+, standard library only. Reads no other file.
@@ -29,6 +30,8 @@ NS = {
     "dcterms": "http://purl.org/dc/terms/",
 }
 MAX_PART = 200 * 1024 * 1024  # refuse absurdly large XML parts (zip bombs)
+GENERATOR_DEFAULTS = {"Author": "python-docx", "Created": "2013-12-23T23:15:00Z"}  # python-docx template values
+MAX_BOLD_HEADING = 120
 
 
 def q(tag):
@@ -51,14 +54,17 @@ def read_xml(z, name):
 
 
 def style_names(z):
-    """styleId -> lower-case style name. Built-in names stay English in localized documents."""
+    """(styleId -> lower-case style name, styleIds whose definition carries Word numbering).
+    Built-in names stay English in localized documents."""
     root = read_xml(z, "word/styles.xml")
-    names = {}
+    names, numbered = {}, set()
     if root is not None:
         for s in root.iter(q("w:style")):
             name = s.find(q("w:name"))
             names[wval(s, "styleId")] = (wval(name) or "").lower()
-    return names
+            if s.find("w:pPr/w:numPr", NS) is not None:
+                numbered.add(wval(s, "styleId"))
+    return names, numbered
 
 
 def core(z):
@@ -67,14 +73,15 @@ def core(z):
     if root is not None:
         for label, tag in (("Title", "dc:title"), ("Author", "dc:creator"), ("Created", "dcterms:created")):
             el = root.find(q(tag))
-            if el is not None and (el.text or "").strip():
-                lines.append("%s: %s" % (label, el.text.strip()))
+            value = (el.text or "").strip() if el is not None else ""
+            if value and GENERATOR_DEFAULTS.get(label) != value:
+                lines.append("%s: %s" % (label, value))
     return lines
 
 
 class Reader:
     def __init__(self, z):
-        self.styles = style_names(z)
+        self.styles, self.numbered = style_names(z)
         self.images = 0
 
     def style(self, p):
@@ -92,6 +99,14 @@ class Reader:
                 out.append(" ")
         return re.sub(r"[ \t]+", " ", "".join(out)).strip()
 
+    def bold(self, p):
+        """True when every run with visible text is bold by direct formatting (bold styles are not resolved)."""
+        def on(r):
+            b = r.find("w:rPr/w:b", NS)
+            return b is not None and wval(b) not in ("0", "false", "off")
+        runs = [r for r in p.iter(q("w:r")) if any((t.text or "").strip() for t in r.iter(q("w:t")))]
+        return bool(runs) and all(on(r) for r in runs)
+
     def image_labels(self, p):
         labels = []
         for el in p.iter():
@@ -104,8 +119,9 @@ class Reader:
     def is_caption(self, p):
         return p is not None and p.tag == q("w:p") and self.style(p) == "caption"
 
-    def paragraph(self, p, prev=None, nxt=None, plain=False):
-        """Lines for one paragraph; prev/next blocks give a nearby caption for images."""
+    def paragraph(self, p, prev=None, nxt=None, plain=False, following=None):
+        """Lines for one paragraph; prev/next blocks give a nearby caption for images, following is the
+        next block with text (a bold-only paragraph before normal text is a heading)."""
         style, text = self.style(p), self.text(p)
         lines = []
         if text and plain:
@@ -116,9 +132,13 @@ class Reader:
                 lines.append("# " + text)
             elif heading:
                 lines.append("#" * int(heading.group(1)) + " " + text)
-            elif p.find("w:pPr/w:numPr", NS) is not None or style.startswith("list"):
+            elif (p.find("w:pPr/w:numPr", NS) is not None or style.startswith("list")
+                  or wval(p.find("w:pPr/w:pStyle", NS)) in self.numbered):
                 level = wval(p.find("w:pPr/w:numPr/w:ilvl", NS)) or "0"
                 lines.append("  " * min(int(level) if level.isdigit() else 0, 5) + "- " + text)
+            elif (len(text) <= MAX_BOLD_HEADING and self.bold(p) and following is not None
+                  and following.tag == q("w:p") and not self.bold(following)):
+                lines.append("## " + text)
             else:
                 lines.append(text)
         for label in self.image_labels(p):
@@ -182,6 +202,7 @@ class Reader:
     def body(self, root):
         body = root.find("w:body", NS)
         blocks = self.blocks(body) if body is not None else []
+        texts = [self.text(b) if b.tag == q("w:p") else None for b in blocks]  # None = table
         out = []
         for i, b in enumerate(blocks):
             if b.tag == q("w:tbl"):
@@ -189,7 +210,8 @@ class Reader:
             else:
                 prev = blocks[i - 1] if i else None
                 nxt = blocks[i + 1] if i + 1 < len(blocks) else None
-                lines = self.paragraph(b, prev, nxt)
+                following = next((x for x, t in zip(blocks[i + 1:], texts[i + 1:]) if t != ""), None)
+                lines = self.paragraph(b, prev, nxt, following=following)
             if lines:
                 out.append("\n".join(lines))
         return out

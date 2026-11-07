@@ -57,7 +57,58 @@ def test_docx():
     return buf
 
 
+def make_docx(body, core=None, styles=None):
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as z:
+        z.writestr("word/document.xml", '<w:document xmlns:w="%s"><w:body>%s</w:body></w:document>' % (W, body))
+        if core is not None:
+            z.writestr("docProps/core.xml", core)
+        if styles is not None:
+            z.writestr("word/styles.xml", '<w:styles xmlns:w="%s">%s</w:styles>' % (W, styles))
+    buf.seek(0)
+    return docx_text.docx_to_text(buf)
+
+
+def bold(text):
+    return '<w:p><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">%s</w:t></w:r></w:p>' % text
+
+
+def numbered(text, bold_run=False):
+    rpr = "<w:rPr><w:b/></w:rPr>" if bold_run else ""
+    return ('<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="3"/></w:numPr></w:pPr>'
+            '<w:r>%s<w:t>%s</w:t></w:r></w:p>' % (rpr, text))
+
+
 class TestDocxText(unittest.TestCase):
+    def test_bold_paragraph_before_normal_text_is_heading(self):
+        out = make_docx(bold("Latar Belakang") + p("Normal text.") + bold("Bold line") + bold("Bold next")
+                        + p("Text.") + bold("X" * 121) + p("Text.") + bold("Before table")
+                        + "<w:tbl><w:tr>%s</w:tr></w:tbl>" % cell("A"))
+        self.assertIn("## Latar Belakang\n\nNormal text.", out)
+        self.assertIn("\nBold line\n", out)  # followed by bold text: not a heading
+        self.assertIn("## Bold next", out)
+        self.assertNotIn("## X", out)  # over 120 characters
+        self.assertNotIn("## Before table", out)
+
+    def test_list_items_one_line_each(self):
+        out = make_docx(numbered("1. Satu") + numbered("Dua", bold_run=True) + p("Tiga", "ListParagraph")
+                        + p("Empat", "ListBullet") + p("Lima", "Poin") + p("Normal text."),
+                        styles='<w:style w:type="paragraph" w:styleId="Poin"><w:name w:val="Poin"/>'
+                               '<w:pPr><w:numPr><w:numId w:val="4"/></w:numPr></w:pPr></w:style>')
+        for line in ("- 1. Satu", "- Dua", "- Tiga", "- Empat", "- Lima"):
+            self.assertIn("\n" + line + "\n", "\n" + out)
+
+    def test_generator_default_metadata_skipped(self):
+        core = ('<cp:coreProperties xmlns:cp="%s" xmlns:dc="%s" xmlns:dcterms="%s"><dc:title></dc:title>'
+                '<dc:creator>python-docx</dc:creator><dcterms:created>2013-12-23T23:15:00Z</dcterms:created>'
+                '</cp:coreProperties>' % (docx_text.NS["cp"], docx_text.NS["dc"], docx_text.NS["dcterms"]))
+        out = make_docx(p("Body."), core)
+        self.assertEqual(out, "Body.\n")
+        real = core.replace("python-docx", "Planning unit").replace("2013-12-23", "2026-03-02")
+        out = make_docx(p("Body."), real)
+        self.assertIn("Author: Planning unit", out)
+        self.assertIn("Created: 2026-03-02T23:15:00Z", out)
+
     def test_body_order_heading_table_image(self):
         out = docx_text.docx_to_text(test_docx())
         self.assertIn("# Requirements", out)

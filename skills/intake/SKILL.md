@@ -20,15 +20,23 @@ writing; it is the exact layout.
 ## Rules
 
 - **No fact without a citation.** Every fact line ends with its source: `[S2 p.7]`, `[S1 §3.2]`,
-  `[S3 "Keterangan" image 4]`, `[S4 2026-03-02 14:05]` (chat message), `[interview Q3]`.
+  `[S3 "Keterangan" image 4]`, `[S4 2026-03-02 14:05]` (chat message), `[interview Q3]`, and
+  `[request]` for the user's own request or instructions.
 - **Assumptions are labelled.** Anything you or the user decide without a source is
   `ASSUMPTION A-nn`, never a plain fact.
-- **The user's language.** Write the file in the language of the user's request (Indonesian
-  request, Indonesian file); translate the template headings. Quote sources in their own language.
-- **Personal and government data stay out.** Record field names and kinds of data, never values:
-  no ID numbers, phone numbers, addresses, health or financial details of individuals, passwords,
-  tokens or internal URLs. Authors and stakeholders are recorded by role unless the user asks for
-  names. Write nothing outside `docs/requirements/` unless the user asks.
+- **Document language = the language of the source material**, not of the request. Mixed sources:
+  the language of most source text; a one-line input: that line's language. The user may override
+  it. Translate every heading, table header and fixed line (including "Next step"); quote sources
+  in their own language.
+- **Data hygiene.** Keep API paths, ports and field names. Drop hosts, IP addresses, credentials,
+  tokens and personal values (ID numbers, phone numbers, addresses, health or financial details).
+  Record people by role when the source gives one, otherwise by the handle the source uses.
+- **Files.** Write only in `docs/requirements/` unless the user asks. Temporary script copies go to
+  the system temp directory and are deleted after the run, even when the user said not to change
+  files outside the repository.
+- **No answers.** If a question round gets no answers (no reply, or a non-interactive run), take
+  every proposed default, record each as `ASSUMPTION A-nn`, write "no answer — default taken" in
+  its Answer cell and skip the next round.
 - **Ask before overwriting.** If `intake.md` exists, ask: update it (keep the source numbers, add
   new sources after them), replace it, or write `intake.proposed.md` beside it.
 - Do not commit, push or upload anything unless the user asks.
@@ -39,9 +47,11 @@ Number every source `S1`, `S2`, ... in the order you read them.
 
 | Input | How to read it |
 |---|---|
-| PDF, image, screenshot | Read natively. Images: describe what the screen or diagram shows. If you cannot read images, list each one under Gaps ("image not read: ...") |
+| PDF | First that works: your native PDF reading; `pdftotext -layout <file> -` if installed; Python `pypdf` if importable; else ask the user for a text or DOCX export. Write the method in the source's Notes; multi-column tables may need realigning |
+| Image, screenshot | Read natively and describe what the screen or diagram shows. If you cannot read images, list each one under Gaps ("image not read: ...") |
 | DOCX | Run `scripts/docx_text.py` (below). It prints headings, lists, tables and `[image N: ...]` markers in body order |
 | Markdown, text, CSV, chat export (WhatsApp/Telegram text or JSON) | Read as text. Chat messages are cited by date and time |
+| Code and config files | Sources like any other (`.claude/kit.json` included). A file that only generates another source (same text): cite the generated document only |
 | Other formats (XLSX, PPTX, ODT) | Read them if your tools can; otherwise list them under Gaps |
 | Local folder | Walk it recursively. Skip `.git`, `.venv`, `node_modules`, `vendor`, `__pycache__`, build output and binaries (archives, executables, media other than images). Show the user the file list before reading more than 30 files |
 | Google Drive folder or link | Use your Google Drive connector (list, then read or export each file). No connector: say so and ask the user to download the folder or paste the files |
@@ -49,16 +59,17 @@ Number every source `S1`, `S2`, ... in the order you read them.
 | A single line ("Portal layanan publik digital terpadu (Superapps)") | One source, type "one-line brief". Expect a thin result and go to the interview |
 
 For each source fill the Sources table: type, date (from the document, else "unknown"), author (role
-or organisation unit as printed, else "unknown"), notes (pages read, what was skipped, quality).
+or organisation unit as printed, else "unknown"), notes (pages read, reading method, what was
+skipped, quality).
 
 ### Running scripts/docx_text.py
 
 1. Pick `<python>` once: the first of `python3`, `python`, `py -3` whose `--version` prints Python
    3.8 or newer (`python3` can be a store stub on Windows, and `py` can fail inside an agent
    sandbox).
-2. Write `scripts/docx_text.py` from this skill, unchanged, to a temporary file outside the
-   repository; run `<python> <temp>/docx_text.py <file.docx>`; delete the temporary file when all
-   DOCX files are read. The script reads no other file of this skill.
+2. Make a directory with `<python> -c "import tempfile; print(tempfile.mkdtemp())"`, write
+   `scripts/docx_text.py` there unchanged, run `<python> <dir>/docx_text.py <file.docx>`, and delete
+   the directory when all DOCX files are read. The script reads no other file of this skill.
 3. No working Python: read the DOCX with your own tools if you can, else list it under Gaps.
 
 Citations from DOCX output use the nearest heading (`[S1 §2.3]` or `[S1 "Ruang Lingkup"]`) and
@@ -104,13 +115,14 @@ features, deadline, team.
 - Every question carries a proposed default: "Who signs off the release? (default: the head of the
   requesting unit)". The user may answer "defaults" to accept them all.
 - Number questions `Q1`, `Q2`, ... across both rounds. Answers become facts cited `[interview Qn]`.
-- After two rounds, or if the user stops answering or the run is non-interactive, every open item
-  becomes `ASSUMPTION A-nn` with the default you proposed, listed in the Assumptions section.
+- After two rounds, or when the user stops answering, every open item becomes `ASSUMPTION A-nn`
+  with the default you proposed. Gaps no question covered also become assumptions, marked
+  "not asked", each with a proposed default.
 
 ## Step 6: Write and report
 
 Write `docs/requirements/intake.md` from `templates/intake.md`. Then tell the user, in their
 language: number of sources, facts per kind, gaps, assumptions, the project kind, and any source you
-could not read. End your reply and the file with:
+could not read. End the file and your reply with this line, translated into the language of each:
 
 "Next step: Lanewright SRS turns this into a requirements document."

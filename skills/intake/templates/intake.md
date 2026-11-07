@@ -1,6 +1,6 @@
 <!--
-Layout of docs/requirements/intake.md. Translate every heading, label and table header into the
-document language (the user's language). Keep the kind tags, citation forms, S/Q/A numbering and
+Layout of docs/requirements/intake.md. Translate every heading, label, table header and the Next
+step line into the document language (the language of the sources). Keep the kind tags, citation forms, S/Q/A numbering and
 the word ASSUMPTION exactly as shown, so the SRS skill can parse them. Delete these comments.
 -->
 
@@ -26,8 +26,9 @@ the word ASSUMPTION exactly as shown, so the SRS skill can parse them. Delete th
 
 ## Facts
 
-<!-- One line per fact: "- [kind] statement [citation]". Keep the groups in this order; drop a
-group heading only if it has no facts and no gap. -->
+<!-- One line per fact: "- [kind] statement [citation]". Keep the groups in this order. A group
+with a gap but no facts keeps its heading with the gap line under it (see Budget); drop a group
+with neither. -->
 
 ### Goals
 
@@ -73,6 +74,10 @@ group heading only if it has no facts and no gap. -->
 
 - [budget] <amount, source of funds, fiscal year> [S1 p.9]
 
+<!-- Gap line, when the group has no facts: -->
+
+- Gap G4: <what is missing> — see Gaps
+
 ### Stakeholders
 
 - [stakeholder] <role, interest, decision rights> [interview Q2]
@@ -89,7 +94,7 @@ group heading only if it has no facts and no gap. -->
 
 | # | Missing | Why it matters | Status |
 |---|---|---|---|
-| G1 | <what the sources do not say> | <SRS or sprint plan needs it for ...> | Asked Q1 / ASSUMPTION A-01 / Open |
+| G1 | <what the sources do not say> | <SRS or sprint plan needs it for ...> | Asked Q1 / ASSUMPTION A-01 / ASSUMPTION A-02 (not asked) / Open |
 
 ## Interview
 
@@ -97,7 +102,7 @@ group heading only if it has no facts and no gap. -->
 
 | # | Question | Proposed default | Answer |
 |---|---|---|---|
-| Q1 | ... | ... | <answer, "default accepted" or "no answer"> |
+| Q1 | ... | ... | <answer, "default accepted" or "no answer — default taken"> |
 
 ### Round 2 — <YYYY-MM-DD>
 
@@ -109,7 +114,8 @@ group heading only if it has no facts and no gap. -->
 
 | # | ASSUMPTION | Basis | Confirm with |
 |---|---|---|---|
-| A-01 | ASSUMPTION: <statement> | Default proposed in Q3, not answered | <role> |
+| A-01 | ASSUMPTION: <statement> | Default proposed in Q3, no answer — default taken | <role> |
+| A-02 | ASSUMPTION: <statement> | Not asked; proposed default for gap G5 | <role> |
 
 ## Sources not read
 

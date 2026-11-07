@@ -1,7 +1,8 @@
 <!--
 SRS outline for a new application (IEEE 29148 style). Translate every heading, label and table
-header into the document language. Keep the IDs (F-01, NFR-01, BR-01, UC-01, A-01) and the word
-ASSUMPTION exactly as shown. Delete these comments. Source citations come from the intake file.
+header, and the Next step line, into the document language. Keep the IDs (F-01, NFR-01,
+BR-01, UC-01, A-01) and the word ASSUMPTION exactly as shown. Delete these comments. Source
+citations come from the intake file.
 -->
 
 # Software Requirements Specification — <project name>
@@ -62,31 +63,31 @@ ASSUMPTION exactly as shown. Delete these comments. Source citations come from t
 
 ## 3 Functional requirements
 
-<!-- One block per requirement. Group under 3.x sub-headings by feature area when there are more
-than about ten. -->
+<!-- Group requirements by feature area under ### 3.x headings; each requirement is a #### block. -->
 
-### F-01 <short name>
+### 3.1 <feature area>
+
+#### F-01 <short name>
 
 - **Requirement:** The system shall <one behaviour>.
 - **Actor:** <actor>
-- **Priority:** Must / Should / Could
+- **Priority:** Must / Should / Could (the source's; else core flow of the first release = Must,
+  supporting = Should, nice-to-have = Could; assumed detail: keep it and name A-nn)
 - **Acceptance criteria:**
   - AC1: Given <state>, when <action>, then <observable result>.
   - AC2: ...
 - **Source:** [S2 §3.2] / ASSUMPTION A-02
+- **Source ID:** <the source's own number, e.g. F-01 or UC-03; omit when the source has none>
 
 ## 4 Non-functional requirements
 
-| ID | Category | Requirement | Target | Source |
-|---|---|---|---|---|
-| NFR-01 | Security | <statement> | <measurable target or "to be confirmed"> | [citation] |
-| NFR-02 | Privacy | ... | ... | ... |
-| NFR-03 | Performance | ... | ... | ... |
-| NFR-04 | Availability | ... | ... | ... |
-| NFR-05 | Accessibility | ... | ... | ... |
-| NFR-06 | Maintainability | ... | ... | ... |
+<!-- One row per category a source or the user mentions; other categories go to 8 Open questions. -->
 
-## 5 Data
+| ID | Category | Requirement | Target | Source | Source ID |
+|---|---|---|---|---|---|
+| NFR-01 | <category a source names> | <statement> | <measurable target or "to be confirmed"> | [citation] | <e.g. NFR-05, or —> |
+
+## 5 Entities and business rules
 
 ### 5.1 Entities
 
@@ -120,15 +121,17 @@ than about ten. -->
 
 ## 8 Open questions
 
-| # | Question | Affects | Owner | Origin |
+| # | Question | Rests on | Affects | Owner |
 |---|---|---|---|---|
-| OQ-01 | <question> | F-03, NFR-02 | <role> | Gap G2 / ASSUMPTION A-01 |
+| OQ-01 | Confirm ASSUMPTION A-01: <statement> | A-01 | F-03, F-07, NFR-02 | <role> |
+| OQ-02 | <question> | Gap G2 | F-05 | <role> |
+| OQ-03 | Is <category> needed (no source mentions it)? | Not in any source | — | <role> |
 
 ## Traceability
 
-| Requirement | Source |
-|---|---|
-| F-01 | [S2 §3.2] |
-| NFR-01 | ASSUMPTION A-03 |
+| Requirement | Source | Source ID |
+|---|---|---|
+| F-01 | [S2 §3.2] | F-01 |
+| NFR-01 | [S1 p.4]; ASSUMPTION A-03 | — |
 
 Next step: Lanewright Sprint Planner turns this into a weekly sprint plan.

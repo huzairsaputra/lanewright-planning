@@ -1,7 +1,7 @@
 <!--
 Layout of docs/sprints/weekly-sprint-plan.md. Keep the sections in this order. Translate headings,
-labels and table headers into the document language; for Indonesian use exactly the terms in the
-table below. Delete these comments, but keep the pagebreak comment lines: md_to_docx.py turns
+labels, table headers and the Next step line into the document language; for Indonesian use
+exactly the terms in the table below. Delete these comments, but keep the pagebreak comment lines: md_to_docx.py turns
 each into a page break before a sprint.
 
 | English | Indonesian |
@@ -30,6 +30,8 @@ each into a page break before a sprint.
 | Metric / Definition / Target | Metrik / Definisi / Target |
 | Appendix A. Scrum event templates | Lampiran A. Templat Acara Scrum |
 | Field / Content | Ruas / Isi |
+| Planner assumptions / to confirm / date to confirm | Asumsi perencanaan / perlu dikonfirmasi / tanggal perlu dikonfirmasi |
+| Next step: run the sprints with ... or with the free scrum-kit ... | Langkah berikutnya: jalankan sprint dengan ... atau dengan scrum-kit gratis ... |
 -->
 
 # Weekly Sprint Plan — <project name>
@@ -55,13 +57,18 @@ each into a page break before a sprint.
 
 ### 1.3 Basis
 
-<The SRS and its version; assumptions taken from the SRS and from the planning interview.>
+<The SRS and its version; assumptions taken from the SRS.>
+
+Planner assumptions (defaults taken without an answer):
+
+- PA-01 <statement> — to confirm with <role>
 
 ### 1.4 Date assumptions
 
 - Project start: <Monday date> (day 1). End: <date> (day N).
 - Sprints run Monday to Sunday; working days are Monday to Friday.
-- Holidays and leave: <list, or "none known at planning time">.
+- Holidays and leave: <list; national holidays nobody confirmed are marked "to confirm" (PA-nn), and a
+  date you are unsure of reads "date to confirm">.
 
 ## 2 Scrum framework
 
@@ -69,7 +76,7 @@ each into a page break before a sprint.
 
 - **Product owner:** <role>; owns the backlog and accepts increments.
 - **Scrum master / orchestrator:** <role>; runs events, removes blockers, guards capacity.
-- **Developers:** <role codes>.
+- **Developers:** <team codes, e.g. BE-1, FE-1, OPS>.
 
 ### 2.2 Artefacts
 
@@ -100,8 +107,8 @@ each into a page break before a sprint.
 |---|---|---|---|
 | BE-1 | 1 / <repository or area> | 10 SP | ... |
 | FE-1 | 1 / ... | 10 SP | ... |
-| DevOps/QA | 1 / ... | 10 SP | ... |
-| **Total** | <P> | <C> SP | 10 SP per person per full week; 6 SP for a week of 4 working days or fewer |
+| OPS | 1 / ... | 10 SP | ... |
+| **Total** | <P> | <C> SP | 10 SP per person per full week; 6 SP for a week of 4 working days or fewer; part-time pro rata (half time → 5 SP) |
 
 <!-- Only when capacity changes between sprints. -->
 
@@ -152,14 +159,17 @@ Sprint Goal: <one demonstrable outcome>.
 
 | No | Backlog item | Owner | SP | Done criteria |
 |---|---|---|---|---|
-| OPS-S01-01 | <item> | DevOps/QA | 3 | <criteria; source requirement> |
+| OPS-S01-01 | <item> | OPS | 3 | <criteria; source requirement> |
 | BE-1-S01-01 | ... | BE-1 | 5 | ... |
+
+<!-- The Owner column holds the team code. -->
 
 Total commitment: <N> SP — <P> people, capacity <C> SP.
 
 #### Risks and dependencies
 
 - <risk or dependency> — <mitigation>
+- BE-1-S01-02 needs OPS-S01-01 (day 1–2) — <mitigation>
 
 #### Increment to demo
 
@@ -213,9 +223,9 @@ Reporting: <who receives the sprint report, when, in what form>.
 
 | Field | Content |
 |---|---|
-| ID | <AREA>-S{nn}-<seq> |
+| ID | <team code>-S{nn}-<seq> |
 | Title | ... |
-| Owner | <role code> |
+| Owner | <team code> |
 | SP | 2–10 |
 | Acceptance criteria | ... |
 | Dependencies | <IDs> |

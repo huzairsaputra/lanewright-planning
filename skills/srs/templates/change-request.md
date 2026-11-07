@@ -1,6 +1,6 @@
 <!--
 SRS outline for a change to an existing system. Translate every heading, label and table header
-into the document language. Keep the IDs (CR-01, NFR-01, BR-01, A-01) and the word ASSUMPTION
+and the Next step line into the document language. Keep the IDs (CR-01, NFR-01, BR-01, A-01) and the word ASSUMPTION
 exactly as shown. Delete these comments. Source citations come from the intake file.
 -->
 
@@ -61,7 +61,12 @@ exactly as shown. Delete these comments. Source citations come from the intake f
 
 ## 3 Requested changes
 
-### CR-01 <short name>
+<!-- Group changes by area under ### 3.x headings; each change is a #### block. CR numbers are this
+document's own and never reuse the existing system's IDs. -->
+
+### 3.1 <area>
+
+#### CR-01 <short name>
 
 - **Current behaviour:** <what happens today> [S3 image 2]
 - **Requested change:** The system shall <new behaviour>.
@@ -69,19 +74,23 @@ exactly as shown. Delete these comments. Source citations come from the intake f
   - Screens: <screens changed or added>
   - Data: <fields, tables, migrations, existing records to convert>
   - API: <endpoints changed, added, deprecated; consumers affected>
-- **Priority:** Must / Should / Could
-- **Acceptance criteria:**
+- **Priority:** Must / Should / Could (the source's; else core flow = Must, supporting = Should,
+  nice-to-have = Could; assumed detail: keep it and name A-nn)
+- **Acceptance criteria (two to five):**
   - AC1: Given <state>, when <action>, then <observable result>.
   - AC2: Existing <behaviour that must not change> still works.
 - **Source:** [S1 p.2] / ASSUMPTION A-02
+- **Source ID:** <the request's own item number, e.g. item 3; omit when it has none>
 
 ## 4 Non-functional impact
 
-| ID | Category | Requirement | Target | Source |
-|---|---|---|---|---|
-| NFR-01 | <security, privacy, performance, availability, accessibility, maintainability> | <statement> | <target or "to be confirmed"> | [citation] |
+<!-- One row per category a source or the user mentions; other categories go to 8 Open questions. -->
 
-## 5 Data and business rules
+| ID | Category | Requirement | Target | Source | Source ID |
+|---|---|---|---|---|---|
+| NFR-01 | <category a source names> | <statement> | <target or "to be confirmed"> | [citation] | <or —> |
+
+## 5 Entities and business rules
 
 ### 5.1 Entities changed
 
@@ -114,14 +123,16 @@ exactly as shown. Delete these comments. Source citations come from the intake f
 
 ## 8 Open questions
 
-| # | Question | Affects | Owner | Origin |
+| # | Question | Rests on | Affects | Owner |
 |---|---|---|---|---|
-| OQ-01 | ... | CR-02 | <role> | Gap G1 |
+| OQ-01 | Confirm ASSUMPTION A-01: <statement> | A-01 | CR-02, CR-04 | <role> |
+| OQ-02 | <question> | Gap G2 | CR-03 | <role> |
+| OQ-03 | Is <category> needed (no source mentions it)? | Not in any source | — | <role> |
 
 ## Traceability
 
-| Requirement | Source |
-|---|---|
-| CR-01 | [S1 p.2] |
+| Requirement | Source | Source ID |
+|---|---|---|
+| CR-01 | [S1 p.2] | item 1 |
 
 Next step: Lanewright Sprint Planner turns this into a weekly sprint plan.
