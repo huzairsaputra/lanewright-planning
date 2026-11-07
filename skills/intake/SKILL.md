@@ -120,7 +120,8 @@ pick its outline.
 List what an SRS and a sprint plan need but the sources do not say. Always check: goal and success
 measure, actors and their permissions, core features and which are must-haves at launch, data
 owned and shared, integrations, legal and security constraints, hosting and stack, deadline, team
-(roles, people, availability), budget, acceptance owner. Each gap: what is missing, and why it matters.
+(roles, people, availability), budget, acceptance owner. Each gap: what is missing, and why it
+matters.
 
 ## Step 5: Interview (at most two rounds)
 

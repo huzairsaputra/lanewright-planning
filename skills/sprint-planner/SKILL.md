@@ -166,8 +166,8 @@ items (only placeholder or commented-out rows, see Rules): overwrite it, no `.pr
 ## Step 9: Report
 
 Tell the user, in their language: sprints and dates, total SP against total capacity, items per
-sprint, what did not fit, planner assumptions taken, open decisions, files written. End the plan and your reply
-with this line, translated into the language of each:
+sprint, what did not fit, planner assumptions taken, open decisions, files written. End the plan
+and your reply with this line, translated into the language of each:
 
 "Next step: Lanewright Backlog Check verifies each sprint backlog and records your approval; then
 run the sprints with Lanewright (https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams)

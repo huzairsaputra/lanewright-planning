@@ -4,8 +4,8 @@ One file per sprint. `{nn}` is the two-digit sprint number in the file name and 
 format for what `.claude/kit.json` has. Keep the table header, section headings and line labels
 exactly as shown, in every document language: the workflow tool parses them. Keep the layout
 identical too: the goal line and the period line each on its own line, with one blank line between
-them and around them, never joined into one line. One row per item; acceptance criteria in one cell,
-separated by `; ` (or `<br>`). Never put a `|` inside a cell.
+them and around them, never joined into one line. One row per item; acceptance criteria in one
+cell, separated by `; ` (or `<br>`). Never put a `|` inside a cell.
 
 The ID uses the team code (`BE-1-S01-01`). The two mapped columns:
 
