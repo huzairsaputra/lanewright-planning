@@ -30,6 +30,8 @@ names, except the approver the user names. Delete these comments.
 | Weakly covered | Tercakup lemah |
 | Sign-off | Persetujuan |
 | Approved by / Role / Date / Overrides | Disetujui oleh / Peran / Tanggal / Pengecualian |
+| DoD not applicable (approved) / none | Butir DoD tidak berlaku (disetujui) / tidak ada |
+| DoD items proposed as not applicable (not approved until listed in the sign-off) / None | Butir DoD yang diusulkan tidak berlaku (belum disetujui sebelum dicantumkan di persetujuan) / Tidak ada |
 | Next step: after approval, run the sprint with ... or the free scrum-kit ... | Langkah berikutnya: setelah disetujui, jalankan sprint dengan ... atau scrum-kit gratis ... |
 -->
 
@@ -90,10 +92,20 @@ script prints the weakly covered coverage line. -->
 
 ## Sign-off
 
-<!-- Leave the four fields empty and the Status "pending human approval" until the user
+<!-- The planner's proposals from section "Definition of Done: items that may not apply" of
+docs/sprints/weekly-sprint-plan.md, item and reason; "None" when it lists none or there is no plan. -->
+
+DoD items proposed as not applicable (not approved until listed in the sign-off):
+
+- Negative authorization test — the notes have no login (SRS A-03)
+
+<!-- Leave the five fields empty and the Status "pending human approval" until the user
 explicitly approves, also when nobody can answer. Overrides: finding numbers and the user's reason,
-e.g. "#1 accepted: the item is split on day 1". -->
+e.g. "#1 accepted: the item is split on day 1". DoD not applicable (approved): only the DoD items
+the user names, separated by "; ", or "none"; filled only together with the other fields, never
+by you alone. An older report without this field counts as none approved. -->
 
 Approved by: ____   Role: ____   Date: ____   Overrides: ____
+DoD not applicable (approved): ____
 
 Next step: after approval, run the sprint with Lanewright (https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free scrum-kit (https://github.com/huzairsaputra/scrum-kit): `Run Lanewright sprint {nn}` / `/scrum-kit:sprint {nn}`.

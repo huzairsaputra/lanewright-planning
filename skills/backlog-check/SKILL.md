@@ -2,7 +2,7 @@
 name: lanewright-backlog-check
 description: Checks sprint backlog files (from Lanewright Sprint Planner or written by hand, in the Lanewright or the scrum-kit format) for readiness before a sprint starts, with a bundled script for the format, ID, story-point, region and traceability rules plus a judgment review of acceptance criteria, size, dependency order and SRS coverage, then writes docs/sprints/backlog-check-{nn}.md with a verdict, the findings and a sign-off block that only a named human fills by approving. It never edits a backlog on its own. Use when the user asks to review, validate or approve a sprint backlog, check the definition of ready, check a backlog before running a sprint, or asks about backlog quality.
 summary: Sprint backlog in, readiness verdict, findings and a human sign-off out, the gate between planning and running a sprint with Lanewright or scrum-kit.
-version: 1.0.1
+version: 1.0.2
 tags: [scrum, sprint-backlog, definition-of-ready, quality-gate, approval, agile]
 keywords: [backlog review, definition of ready, sprint approval, acceptance criteria check, story points, kit.json, scrum-kit, human sign-off]
 use_cases:
@@ -21,8 +21,9 @@ exact layout. You are the gate in front of Lanewright or scrum-kit, not a replac
 
 - **Never edit a backlog without asking.** Suggest fixes in the report; change a backlog file only
   when the user asks for that change.
-- **Never approve on behalf of a human.** The sign-off block stays empty until the user explicitly
-  says yes and gives a name and role. Never invent or guess a name.
+- **Never approve on behalf of a human.** The sign-off block, `DoD not applicable (approved)`
+  included, stays empty until the user explicitly says yes and gives a name and role. Never invent
+  or guess a name, and never approve a DoD item the user did not name.
 - **No answers.** When nobody can answer (a non-interactive run, or no reply), write the report with
   the sign-off block empty and Status "pending human approval", and stop. Never ask again in a
   loop, and never fill the approval yourself.
@@ -50,7 +51,9 @@ exact layout. You are the gate in front of Lanewright or scrum-kit, not a replac
   `.proposed.md` with items gets ERROR `placeholder-official`: suggest moving the proposal into the
   official file; do not move it yourself unless the user asks.
 - A table pasted into the chat: write it to a temp file named `sprint-{nn}-backlog.md` first.
-- Also note `docs/requirements/srs.md` if it exists.
+- Also note `docs/requirements/srs.md` and `docs/sprints/weekly-sprint-plan.md` if they exist. The
+  plan's section "Definition of Done: items that may not apply" (Indonesian "Butir Definition of
+  Done yang mungkin tidak berlaku") holds the planner's proposals.
 
 ## Step 2: Run scripts/backlog_check.py
 
@@ -89,7 +92,7 @@ The script cannot judge these; add each problem as a finding with a suggested fi
 - Dependency order is sensible: a dependency finishes in an earlier sprint, or is a day 1–2 setup or
   contract item in the same sprint.
 - The owner fits the region (a web item is not owned by the ops role).
-- With an SRS: the item traces to an SRS requirement or is a named foundation item, and no Must
+- With an SRS: the item traces to an SRS requirement or is a named setup item, and no Must
   requirement is left without an item in any sprint.
 
 Severity: ERROR for what makes the sprint unrunnable or untestable, WARN for what weakens it, INFO
@@ -109,17 +112,22 @@ One `docs/sprints/backlog-check-{nn}.md` per sprint, from `templates/backlog-che
   findings first, then your judgment findings; name the file in the finding when the sprint has
   more than one.
 - Total SP per sprint (and the SRS coverage lines when an SRS was used, weak coverage included).
+- Above the sign-off, the plan's DoD proposals as a short list, each item with its reason ("None"
+  when the plan has none, or there is no plan). They are not approved until named in the sign-off.
 - Status "pending human approval" and the empty sign-off block. If the report exists and is
   already approved, ask before replacing it; a backlog changed after approval (a different SHA-256)
-  needs a new check and a new approval.
+  needs a new check and a new approval. An older report whose sign-off has no
+  `DoD not applicable (approved)` field counts as none approved.
 
 ## Step 5: Ask for approval
 
 Ask: "Do you approve the sprint {nn} backlog?" (translated into the user's language).
 
-- Explicit yes: ask for the approver's name and role if not given, then fill `Approved by`, `Role`
-  and today's `Date`, and set Status to "approved". Anything less than an explicit yes leaves the
-  block empty and the Status "pending human approval".
+- Explicit yes: ask for the approver's name and role if not given, and which proposed DoD items
+  they approve as not applicable. Then fill `Approved by`, `Role`, today's `Date` and
+  `DoD not applicable (approved)` (the items they name, separated by `; `, or `none`, Indonesian
+  `tidak ada`) together, and set Status to "approved". Anything less than an explicit yes leaves
+  the block empty and the Status "pending human approval".
 - No answer: see the No answers rule; the report stays pending.
 - Verdict `NOT READY`: approval needs an explicit override of each error. Write each override
   (finding number and the user's reason) in `Overrides`; otherwise offer to fix the backlog (only
