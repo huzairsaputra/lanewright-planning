@@ -2,7 +2,7 @@
 name: lanewright-backlog-check
 description: Checks sprint backlog files (from Lanewright Sprint Planner or written by hand, in the Lanewright or the scrum-kit format) for readiness before a sprint starts, with a bundled script for the format, ID, story-point, region and traceability rules plus a judgment review of acceptance criteria, size, dependency order and SRS coverage, then writes docs/sprints/backlog-check-{nn}.md with a verdict, the findings and a sign-off block that only a named human fills by approving. It never edits a backlog on its own. Use when the user asks to review, validate or approve a sprint backlog, check the definition of ready, check a backlog before running a sprint, or asks about backlog quality.
 summary: Sprint backlog in, readiness verdict, findings and a human sign-off out, the gate between planning and running a sprint with Lanewright or scrum-kit.
-version: 1.0.2
+version: 1.0.3
 tags: [scrum, sprint-backlog, definition-of-ready, quality-gate, approval, agile]
 keywords: [backlog review, definition of ready, sprint approval, acceptance criteria check, story points, kit.json, scrum-kit, human sign-off]
 use_cases:
@@ -114,6 +114,8 @@ One `docs/sprints/backlog-check-{nn}.md` per sprint, from `templates/backlog-che
 - Total SP per sprint (and the SRS coverage lines when an SRS was used, weak coverage included).
 - Above the sign-off, the plan's DoD proposals as a short list, each item with its reason ("None"
   when the plan has none, or there is no plan). They are not approved until named in the sign-off.
+  Write each name without a semicolon (a comma or "and" instead): the sign-off field separates names
+  with `;`. When the plan's own wording has one, replace it in the report and leave the plan as it is.
 - Status "pending human approval" and the empty sign-off block. If the report exists and is
   already approved, ask before replacing it; a backlog changed after approval (a different SHA-256)
   needs a new check and a new approval. An older report whose sign-off has no

@@ -62,8 +62,8 @@ class TestRealBuild(unittest.TestCase):
         with tempfile.TemporaryDirectory() as dist:
             self.assertEqual(quiet(build.main, [], dist), 0)
             zips = sorted(os.listdir(dist))
-            self.assertEqual(zips, ["lanewright-backlog-check-1.0.2.zip", "lanewright-intake-1.0.1.zip",
-                                    "lanewright-sprint-planner-1.0.2.zip", "lanewright-srs-1.0.0.zip"])
+            self.assertEqual(zips, ["lanewright-backlog-check-1.0.3.zip", "lanewright-intake-1.0.1.zip",
+                                    "lanewright-sprint-planner-1.0.3.zip", "lanewright-srs-1.0.0.zip"])
             expected = {"lanewright-intake": ["docx_text.py"], "lanewright-srs": ["md_to_docx.py"],
                         "lanewright-sprint-planner": ["md_to_docx.py"],
                         "lanewright-backlog-check": ["backlog_check.py"]}
