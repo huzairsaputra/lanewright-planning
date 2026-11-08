@@ -20,7 +20,4 @@ Part of four free skills: **raw input → Intake → SRS → Sprint Planner → 
 approval) → run the sprints** with [Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free
 [scrum-kit](https://github.com/huzairsaputra/scrum-kit).
 
-Install (free, from Agensi): Lanewright Intake, Lanewright SRS, Lanewright Sprint Planner and
-Lanewright Backlog Check.
-
 MIT licensed. Copyright (c) 2026 Huzair Saputra.

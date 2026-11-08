@@ -55,14 +55,8 @@ what these tools read from `.claude/kit.json`:
 
 ## Install
 
-From Agensi (free): search for the four skills:
-
-- Lanewright Intake
-- Lanewright SRS
-- Lanewright Sprint Planner
-- Lanewright Backlog Check
-
-From this repository (Python 3.8+):
+Download the zip of a skill from the [Releases](https://github.com/huzairsaputra/lanewright-planning/releases)
+page and unpack it into `~/.claude/skills`, or install from this repository (Python 3.8+):
 
 ```
 py -I build.py --install            # builds the four dist/*.zip and installs each skill into ~/.claude/skills
