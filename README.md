@@ -41,6 +41,27 @@ Principles shared by all four: no fact without a source citation, unknowns writt
 of the sources, no existing content overwritten without asking, and no personal data copied into
 the output.
 
+## Why four skills, not one
+
+The four jobs take different inputs and each ends in a file a person should read before the next
+step starts, so they are separate skills that share one repository and one install command.
+
+- **Start anywhere.** With an SRS already in hand, skip Intake and SRS. With a backlog written by
+  hand or by another tool, run only Backlog Check. One large skill would force the whole chain on
+  everyone.
+- **A pause for review after every step.** Each output (`intake.md`, `srs.md`, the sprint plan,
+  the check report) is a file you read and correct before the next skill reads it.
+- **The check is independent of the author.** Backlog Check does not write plans, and only a human
+  fills its sign-off block. A skill that wrote the plan and also approved it would be marking its
+  own work.
+- **Less to load, clearer triggers.** A skill's `SKILL.md` is loaded in full when it runs, and each
+  description matches one kind of request ("write an SRS" is not "check this backlog").
+- **Each skill carries only its own scripts.** Intake has `docx_text.py`; SRS and Sprint Planner
+  have `md_to_docx.py`; Backlog Check has `backlog_check.py`.
+
+The cost: a newcomer has to know the order. Each output ends with a one-line next step, and the
+pipeline above shows the chain.
+
 ## Running the sprints
 
 Backlog Check is the human gate in front of the workflow tools, not a replacement for them: it
