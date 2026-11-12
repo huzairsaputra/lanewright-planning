@@ -68,15 +68,22 @@ Backlog Check is the human gate in front of the workflow tools, not a replacemen
 reports and records your approval, and you then run the approved sprint. The backlog files match
 what these tools read from `.claude/kit.json`:
 
-- [Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams)
-  (paid): role-based multi-agent Scrum with per-branch file ownership, gate evidence and
+- [Lanewright](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams)
+  (paid, referral link): role-based multi-agent Scrum with per-branch file ownership, gate evidence and
   approval-gated merges. "Run Lanewright sprint 1".
 - [scrum-kit](https://github.com/huzairsaputra/scrum-kit) (free, Claude Code plugin):
   `/scrum-kit:sprint 1`.
 
 ## Install
 
-Download the zip of a skill from the [Releases](https://github.com/huzairsaputra/lanewright-planning/releases)
+From Agensi (free; referral links):
+
+- [Lanewright Intake](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-intake-raw-project-input-to-cited-facts)
+- [Lanewright SRS](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-srs-cited-requirements-in-word-and-markdown)
+- [Lanewright Sprint Planner](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-sprint-planner-srs-to-weekly-plan-and-backlogs)
+- [Lanewright Backlog Check](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-backlog-check-readiness-check-and-human-sign-off)
+
+Or download the zip of a skill from the [Releases](https://github.com/huzairsaputra/lanewright-planning/releases)
 page and unpack it into `~/.claude/skills`, or install from this repository (Python 3.8+):
 
 ```

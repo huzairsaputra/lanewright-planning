@@ -4,7 +4,7 @@ Free agent skill. The human gate between planning and running a sprint: it check
 backlog file for readiness and records who approved it, before any agent touches the repository.
 
 - Works on backlogs from Lanewright Sprint Planner or written by hand, in the format
-  [Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or
+  [Lanewright](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or
   the free [scrum-kit](https://github.com/huzairsaputra/scrum-kit) reads, including `.proposed.md`
   files.
 - A bundled Python script (standard library only) checks the table header, leftover template
@@ -24,5 +24,7 @@ Try: "Run Lanewright Backlog Check on sprint 01".
 
 Part of a free pipeline: **Intake → SRS → Sprint Planner → Backlog Check (human approval)**, then
 run the approved sprints with Lanewright or scrum-kit. It does not replace them.
+
+Install (free, from Agensi; referral links): [Lanewright Intake](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-intake-raw-project-input-to-cited-facts), [Lanewright SRS](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-srs-cited-requirements-in-word-and-markdown), [Lanewright Sprint Planner](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-sprint-planner-srs-to-weekly-plan-and-backlogs), [Lanewright Backlog Check](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-backlog-check-readiness-check-and-human-sign-off).
 
 MIT licensed. Copyright (c) 2026 Huzair Saputra.

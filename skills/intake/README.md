@@ -17,7 +17,9 @@ Try: "Run Lanewright Intake on the docs/input folder" or "Lanewright Intake: a c
 portal for our city".
 
 Part of four free skills: **raw input → Intake → SRS → Sprint Planner → Backlog Check (human
-approval) → run the sprints** with [Lanewright](https://www.agensi.io/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free
+approval) → run the sprints** with [Lanewright](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams) or the free
 [scrum-kit](https://github.com/huzairsaputra/scrum-kit).
+
+Install (free, from Agensi; referral links): [Lanewright Intake](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-intake-raw-project-input-to-cited-facts), [Lanewright SRS](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-srs-cited-requirements-in-word-and-markdown), [Lanewright Sprint Planner](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-sprint-planner-srs-to-weekly-plan-and-backlogs), [Lanewright Backlog Check](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-backlog-check-readiness-check-and-human-sign-off).
 
 MIT licensed. Copyright (c) 2026 Huzair Saputra.
