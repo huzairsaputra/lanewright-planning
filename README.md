@@ -69,14 +69,14 @@ reports and records your approval, and you then run the approved sprint. The bac
 what these tools read from `.claude/kit.json`:
 
 - [Lanewright](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-sprint-workflow-for-ai-coding-agent-teams)
-  (paid, referral link): role-based multi-agent Scrum with per-branch file ownership, gate evidence and
+  (paid): role-based multi-agent Scrum with per-branch file ownership, gate evidence and
   approval-gated merges. "Run Lanewright sprint 1".
 - [scrum-kit](https://github.com/huzairsaputra/scrum-kit) (free, Claude Code plugin):
   `/scrum-kit:sprint 1`.
 
 ## Install
 
-From Agensi (free; referral links):
+From Agensi (free):
 
 - [Lanewright Intake](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-intake-raw-project-input-to-cited-facts)
 - [Lanewright SRS](https://www.agensi.io/r/HUZAIRSAPUTRA?to=/skills/lanewright-srs-cited-requirements-in-word-and-markdown)
