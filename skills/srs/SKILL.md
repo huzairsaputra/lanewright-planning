@@ -2,7 +2,7 @@
 name: lanewright-srs
 description: Turns a cited evidence file (docs/requirements/intake.md) into a Software Requirements Specification in IEEE 29148 style, docs/requirements/srs.md plus a Word copy srs.docx, with numbered functional and non-functional requirements, testable acceptance criteria, data and business rules, use cases, integrations, open questions and a traceability table back to the sources; for a change to an existing system it writes a change-request SRS instead. Use when the user asks for an SRS, a requirements document, a functional specification or a change-request specification, or wants the intake turned into requirements.
 summary: Evidence file in, traceable SRS out (Markdown and DOCX), every requirement testable and cited, assumptions never silently promoted to requirements.
-version: 1.0.0
+version: 1.0.1
 tags: [requirements, srs, ieee-29148, business-analysis, specification, documentation]
 keywords: [software requirements specification, functional requirements, acceptance criteria, traceability matrix, use cases, change request, non-functional requirements, docx export]
 use_cases:
